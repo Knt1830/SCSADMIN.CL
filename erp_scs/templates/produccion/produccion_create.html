@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        Registro de Producción
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Ingrese los detalles de la producción
+                    </p>
+                </div>
+                <div>
+                    <a href="{% if request.GET.lote %}{% url 'produccion:lote_detail' request.GET.lote %}{% else %}{% url 'produccion:produccion_list' %}{% endif %}" 
+                       class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                        <i class="fas fa-arrow-left mr-2"></i>Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="bg-white shadow rounded-lg">
+            <form method="post" class="space-y-6 p-6">
+                {% csrf_token %}
+                {{ items_formset.management_form }}
+
+                <!-- Información Principal -->
+                <div class="mb-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="p-4 mb-4 rounded-md {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-400{% else %}bg-green-100 text-green-700 border border-green-400{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="space-y-6">
+                    <!-- Lote -->
+                    <div>
+                        <label for="{{ form.lote.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Lote
+                        </label>
+                        <div class="mt-1">
+                            {{ form.lote }}
+                            {% if form.lote.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.lote.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Trabajador -->
+                    <div>
+                        <label for="{{ form.trabajador.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Trabajador
+                        </label>
+                        <div class="mt-1">
+                            {{ form.trabajador }}
+                            {% if form.trabajador.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.trabajador.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Fecha y Hora -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="{{ form.fecha.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Fecha
+                            </label>
+                            <div class="mt-1">
+                                {{ form.fecha }}
+                            </div>
+                        </div>
+                        <div>
+                            <label for="{{ form.hora_inicio.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Hora Inicio
+                            </label>
+                            <div class="mt-1">
+                                {{ form.hora_inicio }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Materias Primas Utilizadas -->
+                <div class="mt-8">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Materias Primas Utilizadas</h3>
+                    <div id="materias-primas-container" class="space-y-4">
+                        {{ materias_primas_formset.management_form }}
+                        {% if materias_primas_formset.non_form_errors %}
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                {{ materias_primas_formset.non_form_errors }}
+                            </div>
+                        {% endif %}
+                        {% for form in materias_primas_formset %}
+                            <div class="materia-prima-form border rounded-lg p-4 bg-gray-50">
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Materia Prima
+                                        </label>
+                                        {{ form.producto }}
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Cantidad
+                                        </label>
+                                        {{ form.cantidad }}
+                                    </div>
+                                </div>
+                                {% if materias_primas_formset.can_delete %}
+                                    <div class="flex justify-end mt-4">
+                                        <button type="button" class="remove-materia text-red-600 hover:text-red-800 text-sm">
+                                            <i class="fas fa-trash-alt mr-1"></i>
+                                            Eliminar Materia Prima
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4">
+                        <button type="button" id="add-materia-prima"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fas fa-plus mr-2"></i>
+                            Agregar Materia Prima
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Items de Producción -->
+                <div class="mt-8">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Items Producidos</h3>
+                    <div id="items-container" class="space-y-4">
+                        {% if items_formset.non_form_errors %}
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                {{ items_formset.non_form_errors }}
+                            </div>
+                        {% endif %}
+                        {% for form in items_formset %}
+                            <div class="item-form border rounded-lg p-4 bg-gray-50">
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Producto
+                                        </label>
+                                        {{ form.producto }}
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Cantidad
+                                        </label>
+                                        {{ form.cantidad_producida }}
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Precio por Unidad
+                                        </label>
+                                        {{ form.precio_unidad }}
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Calidad
+                                        </label>
+                                        {{ form.calidad }}
+                                    </div>
+                                </div>
+
+                                {% if items_formset.can_delete %}
+                                    <div class="flex justify-end mt-4">
+                                        <button type="button" 
+                                                class="remove-item text-red-600 hover:text-red-800 text-sm">
+                                            <i class="fas fa-trash-alt mr-1"></i>
+                                            Eliminar Item
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="button" id="add-item"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fas fa-plus mr-2"></i>
+                            Agregar Item
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="flex justify-end space-x-3 pt-6 border-t">
+                    <button type="button" onclick="window.history.back()"
+                            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700">
+                        Registrar Producción
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById('add-item');
+    const itemsContainer = document.getElementById('items-container');
+    const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+    
+    // Función para actualizar los índices
+    function updateElementIndex(el, prefix, ndx) {
+        const id_regex = new RegExp('(' + prefix + '-\\d+)');
+        const replacement = prefix + '-' + ndx;
+        
+        if (el.for) el.for = el.for.replace(id_regex, replacement);
+        if (el.id) el.id = el.id.replace(id_regex, replacement);
+        if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+    
+    // Agregar nuevo item
+    addButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const formCount = parseInt(totalForms.value);
+        
+        // Clonar el primer form
+        const emptyForm = itemsContainer.children[0].cloneNode(true);
+        
+        // Limpiar valores
+        emptyForm.querySelectorAll('input:not([type=hidden]), select').forEach(input => {
+            input.value = '';
+        });
+        
+        // Actualizar índices
+        emptyForm.querySelectorAll('[id], [name], [for]').forEach(element => {
+            updateElementIndex(element, 'form', formCount);
+        });
+        
+        // Agregar el nuevo form
+        itemsContainer.appendChild(emptyForm);
+        totalForms.value = formCount + 1;
+        
+        // Agregar evento de eliminación
+        const removeButton = emptyForm.querySelector('.remove-item');
+        if (removeButton) {
+            removeButton.addEventListener('click', function() {
+                emptyForm.remove();
+                totalForms.value = parseInt(totalForms.value) - 1;
+            });
+        }
+    });
+    
+    // Agregar eventos de eliminación a items existentes
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', function() {
+            const item = this.closest('.item-form');
+            item.remove();
+            totalForms.value = parseInt(totalForms.value) - 1;
+        });
+    });
+});
+
+const addMateriaPrimaButton = document.getElementById('add-materia-prima');
+const materiasPrimasContainer = document.getElementById('materias-primas-container');
+
+addMateriaPrimaButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    const formCount = parseInt(document.getElementById('id_materiaprimautilizada_set-TOTAL_FORMS').value);
+    
+    // Clonar el primer form
+    const emptyForm = materiasPrimasContainer.children[1].cloneNode(true);
+    
+    // Limpiar valores
+    emptyForm.querySelectorAll('input:not([type=hidden]), select').forEach(input => {
+        input.value = '';
+    });
+    
+    // Actualizar índices
+    emptyForm.querySelectorAll('[id], [name]').forEach(element => {
+        updateElementIndex(element, 'materiaprimautilizada_set', formCount);
+    });
+    
+    // Agregar el nuevo form
+    materiasPrimasContainer.appendChild(emptyForm);
+    document.getElementById('id_materiaprimautilizada_set-TOTAL_FORMS').value = formCount + 1;
+    
+    // Agregar evento de eliminación
+    const removeButton = emptyForm.querySelector('.remove-materia');
+    if (removeButton) {
+        removeButton.addEventListener('click', function() {
+            emptyForm.remove();
+            document.getElementById('id_materiaprimautilizada_set-TOTAL_FORMS').value = 
+                parseInt(document.getElementById('id_materiaprimautilizada_set-TOTAL_FORMS').value) - 1;
+        });
+    }
+});
+
+// Agregar eventos de eliminación a materias primas existentes
+document.querySelectorAll('.remove-materia').forEach(button => {
+    button.addEventListener('click', function() {
+        const item = this.closest('.materia-prima-form');
+        item.remove();
+        document.getElementById('id_materiaprimautilizada_set-TOTAL_FORMS').value = 
+            parseInt(document.getElementById('id_materiaprimautilizada_set-TOTAL_FORMS').value) - 1;
+    });
+});
+</script>
+{% endblock %}

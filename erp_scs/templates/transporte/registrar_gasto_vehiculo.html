@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full bg-white p-8 rounded-lg shadow">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">{{ titulo }}</h2>
+        </div>
+
+        {% if form.errors %}
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            Hay errores en el formulario. Por favor, revisa los campos.
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Vehículo -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Vehículo*</label>
+                    {{ form.vehiculo }}
+                    {% if form.vehiculo.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.vehiculo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Tipo de Gasto -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Tipo de Gasto*</label>
+                    {{ form.tipo }}
+                    {% if form.tipo.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.tipo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Monto -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Monto*</label>
+                    {{ form.monto }}
+                    {% if form.monto.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.monto.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Kilometraje (opcional para algunos tipos de gasto) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Kilometraje</label>
+                    {{ form.kilometraje }}
+                    <p class="mt-1 text-xs text-gray-500">Obligatorio para gastos de combustible</p>
+                    {% if form.kilometraje.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.kilometraje.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Litros (solo para combustible) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Litros</label>
+                    {{ form.litros }}
+                    <p class="mt-1 text-xs text-gray-500">Solo para gastos de combustible</p>
+                    {% if form.litros.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.litros.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8">
+                <a href="{% url 'transporte:lista_gastos_vehiculo' %}" 
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                    Registrar Gasto
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formInputs = document.querySelectorAll('input, select');
+    formInputs.forEach(input => {
+        input.classList.add(
+            'mt-1', 'block', 'w-full', 'rounded-md', 'border-gray-300', 
+            'shadow-sm', 'focus:border-blue-500', 'focus:ring-blue-500'
+        );
+    });
+
+    // Mostrar/ocultar campos de combustible dinámicamente
+    const tipoGastoSelect = document.querySelector('[name="tipo"]');
+    const kilometrajeField = document.querySelector('[name="kilometraje"]').closest('div');
+    const litrosField = document.querySelector('[name="litros"]').closest('div');
+
+    function toggleCombustibleFields() {
+        if (tipoGastoSelect.value === 'combustible') {
+            kilometrajeField.style.display = 'block';
+            litrosField.style.display = 'block';
+        } else {
+            kilometrajeField.style.display = 'none';
+            litrosField.style.display = 'none';
+        }
+    }
+
+    tipoGastoSelect.addEventListener('change', toggleCombustibleFields);
+    toggleCombustibleFields(); // Ejecutar al cargar la página
+});
+</script>
+{% endblock %}

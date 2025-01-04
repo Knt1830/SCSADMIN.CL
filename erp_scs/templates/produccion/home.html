@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">
+                Módulo de Producción
+            </h1>
+            <p class="mt-2 text-sm text-gray-600">
+                Gestión y control de la producción diaria
+            </p>
+        </div>
+
+        <!-- Estadísticas Resumen -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-box-open text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ml-5">
+                            <p class="text-gray-500 text-sm font-medium">Lotes Activos</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ lotes_activos }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-industry text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ml-5">
+                            <p class="text-gray-500 text-sm font-medium">Producción Hoy</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ producciones_hoy }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+            {% for accion in acciones_rapidas %}
+            <a href="{% url accion.url %}" class="block transform hover:scale-105 transition-transform duration-200">
+                <div class="bg-white overflow-hidden shadow rounded-lg h-full"> <!-- Agregado h-full -->
+                    <div class="p-5">
+                        <div class="flex flex-col space-y-3"> <!-- Cambiado a flex-col y espacio uniforme -->
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="rounded-md p-3 {{ accion.color }}">
+                                        <i class="fas {{ accion.icono }} text-white"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium text-gray-900 truncate">
+                                        {{ accion.titulo }}
+                                    </h3>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 line-clamp-2">{{ accion.descripcion }}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Últimos Lotes -->
+        <div class="bg-white shadow rounded-lg mb-8">
+            <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Últimos Lotes
+                </h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flow-root">
+                    <ul class="-my-5 divide-y divide-gray-200">
+                        {% for lote in ultimos_lotes %}
+                        <li class="py-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        {{ lote.codigo }}
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        {{ lote.get_estado_display }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <a href="{% url 'produccion:lote_detail' lote.pk %}" 
+                                       class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
+                                        Ver detalles
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow rounded-lg mb-6 p-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Gestión de Créditos</h2>
+                    <p class="mt-1 text-sm text-gray-600">Administra los créditos pendientes de los clientes</p>
+                </div>
+                <div>
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        Total Créditos: {{ creditos.count }}
+                    </span>
+                </div>
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mt-4 p-4 {% if message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %} rounded-md">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Filtros -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <form method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Cliente</label>
+                    <select name="cliente" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Todos los clientes</option>
+                        {% for cliente in clientes %}
+                            <option value="{{ cliente.id }}" {% if filtros.cliente == cliente.id|stringformat:"s" %}selected{% endif %}>
+                                {{ cliente.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Estado</label>
+                    <select name="estado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Todos los estados</option>
+                        <option value="PENDIENTE" {% if filtros.estado == 'PENDIENTE' %}selected{% endif %}>Pendiente</option>
+                        <option value="PARCIAL" {% if filtros.estado == 'PARCIAL' %}selected{% endif %}>Pago Parcial</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Vencimiento Desde</label>
+                    <input type="date" name="fecha_desde" value="{{ filtros.fecha_desde|default:'' }}"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Vencimiento Hasta</label>
+                    <input type="date" name="fecha_hasta" value="{{ filtros.fecha_hasta|default:'' }}"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+                <div class="md:col-span-4 flex justify-end space-x-4">
+                    {% if filtros.cliente or filtros.estado or filtros.fecha_desde or filtros.fecha_hasta %}
+                        <a href="{% url 'ventas:gestionar_creditos' %}" 
+                           class="text-gray-600 hover:text-gray-900">
+                            Limpiar Filtros
+                        </a>
+                    {% endif %}
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                        Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabla de Créditos -->
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            {% if creditos %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Cliente
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Venta #
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Monto Total
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Pagado
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Pendiente
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Vencimiento
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Estado
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Acciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for credito in creditos %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ credito.cliente.nombre }}</div>
+                                <div class="text-sm text-gray-500">{{ credito.cliente.rut }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <a href="{% url 'ventas:detalle_venta' credito.venta.id %}" 
+                                   class="text-blue-600 hover:text-blue-900">
+                                    {{ credito.venta.id }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                ${{ credito.monto_total|floatformat:2 }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                ${{ credito.monto_pagado|floatformat:2 }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm {% if credito.monto_pendiente > 0 %}text-red-600{% else %}text-green-600{% endif %}">
+                                    ${{ credito.monto_pendiente|floatformat:2 }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm {% if credito.fecha_vencimiento < today %}text-red-600{% else %}text-gray-900{% endif %}">
+                                    {{ credito.fecha_vencimiento|date:"d/m/Y" }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 text-xs rounded-full
+                                    {% if credito.estado == 'PENDIENTE' %}
+                                        bg-yellow-100 text-yellow-800
+                                    {% elif credito.estado == 'PARCIAL' %}
+                                        bg-blue-100 text-blue-800
+                                    {% else %}
+                                        bg-green-100 text-green-800
+                                    {% endif %}">
+                                    {{ credito.get_estado_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button type="button" 
+                                data-credito-id="{{ credito.id }}"
+                                data-cliente-nombre="{{ credito.cliente.nombre }}"
+                                data-monto-pendiente="{{ credito.monto_pendiente }}"
+                                class="btn-pago text-green-600 hover:text-green-900">
+                            <i class="fas fa-dollar-sign"></i>
+                        </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="p-6 text-center text-gray-500">
+                No se encontraron créditos pendientes.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Pago -->
+<div id="modalPago" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">Registrar Pago</h3>
+            <form id="formPago" method="POST" action="" class="mt-4">
+                {% csrf_token %}
+                <div class="mt-2 text-center">
+                    <p class="text-sm text-gray-500" id="modalDescription"></p>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700">Monto a Pagar</label>
+                        <input type="number" name="monto_pago" required min="0" step="0.01"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700">Observaciones</label>
+                        <textarea name="observaciones" rows="2"
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                    </div>
+                </div>
+                <div class="items-center px-4 py-3 mt-4">
+                    <button type="submit" 
+                            class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        Registrar Pago
+                    </button>
+                    <button type="button" onclick="cerrarModalPago()"
+                            class="w-full mt-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejador para botones de pago
+    document.querySelectorAll('.btn-pago').forEach(button => {
+        button.addEventListener('click', function() {
+            const creditoId = this.dataset.creditoId;
+            const clienteNombre = this.dataset.clienteNombre;
+            const montoPendiente = parseFloat(this.dataset.montoPendiente);
+
+            const modal = document.getElementById('modalPago');
+            const descripcion = document.getElementById('modalDescription');
+            const form = document.getElementById('formPago');
+            const montoInput = form.querySelector('input[name="monto_pago"]');
+
+            descripcion.textContent = `Registrar pago para ${clienteNombre}. Monto pendiente: $${montoPendiente.toFixed(2)}`;
+            montoInput.max = montoPendiente;
+            montoInput.value = ''; // Limpiar el valor anterior
+            form.action = `/ventas/creditos/${creditoId}/pago/`;
+            
+            modal.classList.remove('hidden');
+        });
+    });
+
+    // Manejador para cerrar modal
+    const modal = document.getElementById('modalPago');
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            cerrarModalPago();
+        }
+    });
+
+    function cerrarModalPago() {
+        const modal = document.getElementById('modalPago');
+        modal.classList.add('hidden');
+    }
+
+    // Manejador para el botón de cancelar
+    document.querySelector('#modalPago button[type="button"]').addEventListener('click', cerrarModalPago);
+
+    // Validación del formulario
+    document.getElementById('formPago').addEventListener('submit', function(e) {
+        const montoInput = this.querySelector('input[name="monto_pago"]');
+        const monto = parseFloat(montoInput.value);
+        const maxMonto = parseFloat(montoInput.max);
+
+        if (monto <= 0) {
+            e.preventDefault();
+            alert('El monto debe ser mayor a 0');
+        } else if (monto > maxMonto) {
+            e.preventDefault();
+            alert('El monto no puede ser mayor al saldo pendiente');
+        }
+    });
+});
+</script>
+{% endblock %}

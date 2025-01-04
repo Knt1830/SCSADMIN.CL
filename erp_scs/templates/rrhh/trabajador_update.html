@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        {% if object %}
+                            Editar Trabajador
+                        {% else %}
+                            Nuevo Trabajador
+                        {% endif %}
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        {% if object %}
+                            Modificar información del trabajador
+                        {% else %}
+                            Registrar un nuevo trabajador en el sistema
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <a href="{% url 'rrhh:trabajador_list' %}" 
+                       class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                        <i class="fas fa-arrow-left mr-2"></i>Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="bg-white shadow rounded-lg">
+            <form method="post" class="space-y-8 p-6">
+                {% csrf_token %}
+
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="bg-{{ message.tags }}-100 border-l-4 border-{{ message.tags }}-500 text-{{ message.tags }}-700 p-4 mb-4">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Información Personal Básica -->
+                <div class="seccion-basica">
+                    <h2 class="text-lg font-medium text-gray-900 border-b pb-2">Información Básica</h2>
+                    <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <!-- Tipo Trabajador -->
+                        <div class="sm:col-span-2">
+                            <label for="id_tipo" class="block text-sm font-medium text-gray-700">Tipo de Trabajador</label>
+                            {{ form.tipo }}
+                            {% if form.tipo.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.tipo.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Nombres -->
+                        <div>
+                            <label for="id_first_name" class="block text-sm font-medium text-gray-700 required">Nombres</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Apellidos -->
+                        <div>
+                            <label for="id_last_name" class="block text-sm font-medium text-gray-700">Apellidos</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- RUT -->
+                        <div>
+                            <label for="id_rut" class="block text-sm font-medium text-gray-700 required">RUT</label>
+                            {{ form.rut }}
+                            {% if form.rut.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.rut.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label for="id_email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div>
+                            <label for="id_telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                            {{ form.telefono }}
+                            {% if form.telefono.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.telefono.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Contacto Emergencia -->
+                        <div>
+                            <label for="id_contacto_emergencia" class="block text-sm font-medium text-gray-700">Contacto de Emergencia</label>
+                            {{ form.contacto_emergencia }}
+                            {% if form.contacto_emergencia.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.contacto_emergencia.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="id_fecha_nacimiento" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                            {{ form.fecha_nacimiento }}
+                            {% if form.fecha_nacimiento.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.fecha_nacimiento.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secciones solo para trabajador de planta -->
+                <div id="seccion-direccion" class="mt-8">
+                    <h2 class="text-lg font-medium text-gray-900 border-b pb-2">Dirección</h2>
+                    <div class="mt-4">
+                        <label for="id_direccion" class="block text-sm font-medium text-gray-700">Dirección Completa</label>
+                        {{ form.direccion }}
+                        {% if form.direccion.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.direccion.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="seccion-previsional" class="mt-8">
+                    <h2 class="text-lg font-medium text-gray-900 border-b pb-2">Información Personal y Previsional</h2>
+                    <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <!-- Estado Civil -->
+                        <div>
+                            <label for="id_estado_civil" class="block text-sm font-medium text-gray-700">Estado Civil</label>
+                            <select id="id_estado_civil" name="estado_civil" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Seleccione...</option>
+                                {% for value, label in form.fields.estado_civil.choices %}
+                                    <option value="{{ value }}" {% if form.estado_civil.value == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Número de Cargas -->
+                        <div>
+                            <label for="id_numero_cargas" class="block text-sm font-medium text-gray-700">Número de Cargas</label>
+                            <input type="number" id="id_numero_cargas" name="numero_cargas" 
+                                   value="{{ form.numero_cargas.value|default:0 }}"
+                                   class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                        </div>
+
+                        <!-- AFP -->
+                        <div>
+                            <label for="id_afp" class="block text-sm font-medium text-gray-700">AFP</label>
+                            <select id="id_afp" name="afp" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Seleccione...</option>
+                                {% for value, label in form.fields.afp.choices %}
+                                    <option value="{{ value }}" {% if form.afp.value == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Sistema de Salud -->
+                        <div>
+                            <label for="id_sistema_salud" class="block text-sm font-medium text-gray-700">Sistema de Salud</label>
+                            <select id="id_sistema_salud" name="sistema_salud" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Seleccione...</option>
+                                {% for value, label in form.fields.sistema_salud.choices %}
+                                    <option value="{{ value }}" {% if form.sistema_salud.value == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Plan de Salud -->
+                        <div class="sm:col-span-2">
+                            <label for="id_plan_salud" class="block text-sm font-medium text-gray-700">Plan de Salud</label>
+                            <input type="text" id="id_plan_salud" name="plan_salud" 
+                                   value="{{ form.plan_salud.value|default:'' }}"
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="seccion-bancaria" class="mt-8">
+                    <h2 class="text-lg font-medium text-gray-900 border-b pb-2">Información Bancaria</h2>
+                    <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+                        <!-- Banco -->
+                        <div>
+                            <label for="id_banco" class="block text-sm font-medium text-gray-700">Banco</label>
+                            <select id="id_banco" name="banco" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Seleccione...</option>
+                                {% for value, label in form.fields.banco.choices %}
+                                    <option value="{{ value }}" {% if form.banco.value == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Tipo de Cuenta -->
+                        <div>
+                            <label for="id_tipo_cuenta" class="block text-sm font-medium text-gray-700">Tipo de Cuenta</label>
+                            <select id="id_tipo_cuenta" name="tipo_cuenta" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Seleccione...</option>
+                                {% for value, label in form.fields.tipo_cuenta.choices %}
+                                    <option value="{{ value }}" {% if form.tipo_cuenta.value == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Número de Cuenta -->
+                        <div>
+                            <label for="id_numero_cuenta" class="block text-sm font-medium text-gray-700">Número de Cuenta</label>
+                            <input type="text" id="id_numero_cuenta" name="numero_cuenta"
+                                   value="{{ form.numero_cuenta.value|default:'' }}"
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="seccion-fechas-estado" class="mt-8">
+                    <h2 class="text-lg font-medium text-gray-900 border-b pb-2">Fechas y Estado</h2>
+                    <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+                        <!-- Fecha de Ingreso -->
+                        <div>
+                            <label for="id_fecha_ingreso" class="block text-sm font-medium text-gray-700">Fecha de Ingreso</label>
+                            {{ form.fecha_ingreso }}
+                        </div>
+
+                        <!-- Fecha de Término -->
+                        <div>
+                            <label for="id_fecha_termino" class="block text-sm font-medium text-gray-700">Fecha de Término</label>
+                            {{ form.fecha_termino }}
+                        </div>
+
+                        <!-- Estado -->
+                        <div>
+                            <label for="id_estado" class="block text-sm font-medium text-gray-700">Estado</label>
+                            <div class="mt-1">
+                                <input type="checkbox" id="id_estado" name="estado" 
+                                       {% if form.estado.value %}checked{% endif %}
+                                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                <label for="id_estado" class="ml-2 text-sm text-gray-700">Activo</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="mt-8">
+                    <label for="id_observaciones" class="block text-sm font-medium text-gray-700">Observaciones</label>
+                    {{ form.observaciones }}
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="pt-5 mt-8 border-t flex justify-end space-x-3">
+                    <a href="{% url 'rrhh:trabajador_list' %}" 
+                       class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Cancelar
+                    </a>
+                    <button type="submit"
+                            class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        {% if object %}
+                            Guardar Cambios
+                        {% else %}
+                            Crear Trabajador
+                        {% endif %}
+                    </button>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/9.0.1/choices.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/9.0.1/choices.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tipoSelect = $('#id_tipo');
+    const seccionPrevisional = $('#seccion-previsional');
+
+    function toggleSection() {
+        if (tipoSelect.val() === 'TEMPORERO') {
+            seccionPrevisional.hide();
+        } else {
+            seccionPrevisional.show();
+        }
+    }
+
+    tipoSelect.on('change', toggleSection);
+    toggleSection();
+});
+    // Validación de RUT
+    const rutInput = document.getElementById('id_rut');
+    if (rutInput) {
+        rutInput.addEventListener('blur', function() {
+            let rut = this.value.replace(/[.-]/g, '');
+            if (rut.length > 1) {
+                let rutNumeros = rut.slice(0, -1);
+                let rutDv = rut.slice(-1).toUpperCase();
+                rutNumeros = rutNumeros.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                this.value = rutNumeros + "-" + rutDv;
+            }
+        });
+    }
+    
+    // Formatear números de teléfono
+    const telefonoInput = document.getElementById('id_telefono');
+    if (telefonoInput) {
+        telefonoInput.addEventListener('input', function() {
+            let numero = this.value.replace(/\D/g, '');
+            if (numero.length > 0) {
+                if (numero.length <= 8) {
+                    this.value = numero;
+                } else {
+                    this.value = '+56 ' + numero.slice(0, 9);
+                }
+            }
+        });
+    }
+
+function updateFormByTipoTrabajador() {
+    const isTemporal = tipoSelect.value === 'TEMPORERO';
+    console.log('Tipo cambiado:', tipoSelect.value);
+    console.log('Es temporal:', isTemporal);
+    
+    if (seccionPrevisional) {
+        seccionPrevisional.style.display = isTemporal ? 'none' : 'block';
+        const inputs = seccionPrevisional.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            console.log('Campo encontrado:', input.id);
+            input.disabled = isTemporal;
+            input.required = !isTemporal && !input.hasAttribute('data-optional');
+        });
+    }
+}
+</script>
+{% endblock %}

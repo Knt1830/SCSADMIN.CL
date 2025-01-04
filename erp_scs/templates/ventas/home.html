@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header del módulo -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900">Gestión de Ventas</h1>
+        <p class="mt-2 text-sm text-gray-600">Administra clientes, ventas y créditos</p>
+    </div>
+
+    <!-- Tarjetas de resumen -->
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+        <!-- Total de Clientes -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-users text-3xl text-blue-600"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Total Clientes</dt>
+                            <dd class="text-2xl font-semibold text-gray-900">{{ total_clientes }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ventas del Mes -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-chart-line text-3xl text-green-600"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Ventas este Mes</dt>
+                            <dd class="text-2xl font-semibold text-gray-900">{{ ventas_mes }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Créditos Pendientes -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-file-invoice-dollar text-3xl text-yellow-500"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Créditos Pendientes</dt>
+                            <dd class="text-2xl font-semibold text-gray-900">{{ creditos_pendientes }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones principales -->
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Nueva Venta -->
+        <a href="{% url 'ventas:nueva_venta' %}" 
+           class="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-200">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-cash-register text-3xl text-green-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Nueva Venta</h3>
+                        <p class="mt-1 text-sm text-gray-500">Registra una nueva venta</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Registrar Cliente -->
+        <a href="{% url 'ventas:registrar_cliente' %}" 
+           class="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-200">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-user-plus text-3xl text-blue-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Registrar Cliente</h3>
+                        <p class="mt-1 text-sm text-gray-500">Añade un nuevo cliente</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Lista de Ventas -->
+        <a href="{% url 'ventas:lista_ventas' %}" 
+           class="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-200">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-list text-3xl text-purple-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Historial de Ventas</h3>
+                        <p class="mt-1 text-sm text-gray-500">Consulta ventas realizadas</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Gestionar Créditos -->
+        <a href="{% url 'ventas:gestionar_creditos' %}" 
+           class="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-200">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-file-invoice-dollar text-3xl text-indigo-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Gestionar Créditos</h3>
+                        <p class="mt-1 text-sm text-gray-500">Administra créditos pendientes</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Lista de Clientes -->
+        <a href="{% url 'ventas:lista_clientes' %}" 
+           class="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-200">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-address-book text-3xl text-teal-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Listado de Clientes</h3>
+                        <p class="mt-1 text-sm text-gray-500">Consulta y administra clientes</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

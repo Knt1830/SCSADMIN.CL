@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 h-16 w-16">
+                        {% if trabajador.tipo == 'PLANTA' %}
+                        <span class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-blue-100">
+                            <i class="fas fa-user-tie text-3xl text-blue-600"></i>
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
+                            <i class="fas fa-user text-3xl text-green-600"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="ml-4">
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            {{ trabajador.usuario.get_full_name }}
+                        </h1>
+                        <div class="mt-1 flex items-center">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if trabajador.tipo == 'PLANTA' %}
+                                bg-blue-100 text-blue-800
+                                {% else %}
+                                bg-green-100 text-green-800
+                                {% endif %}">
+                                {{ trabajador.get_tipo_display }}
+                            </span>
+                            <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if trabajador.estado %}
+                                bg-green-100 text-green-800
+                                {% else %}
+                                bg-red-100 text-red-800
+                                {% endif %}">
+                                {{ trabajador.estado|yesno:"Activo,Inactivo" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <a href="{% url 'rrhh:trabajador_update' trabajador.pk %}" 
+                       class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700">
+                        <i class="fas fa-edit mr-2"></i>Editar
+                    </a>
+                    {% if trabajador.tipo == 'PLANTA' %}
+                    <a href="{% url 'rrhh:contrato_create' trabajador.pk %}" 
+                       class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-file-contract mr-2"></i>Nuevo Contrato
+                    </a>
+                    {% else %}
+                    <a href="{% url 'rrhh:tarifa_create' trabajador.pk %}" 
+                       class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-tags mr-2"></i>Nueva Tarifa
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <!-- Información Personal -->
+            <div class="lg:col-span-1">
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg font-medium text-gray-900">Información Personal</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+                        <dl class="grid grid-cols-1 gap-x-4 gap-y-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">RUT</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.rut }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Email</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.usuario.email }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Teléfono</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.telefono }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Fecha de Nacimiento</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.fecha_nacimiento|date:"d/m/Y" }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Contacto de Emergencia</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.contacto_emergencia }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Dirección</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.direccion }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Información Bancaria -->
+                <div class="bg-white shadow rounded-lg mt-6">
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg font-medium text-gray-900">Información Bancaria</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+                        <dl class="grid grid-cols-1 gap-x-4 gap-y-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Banco</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.get_banco_display|default:"No especificado" }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Tipo de Cuenta</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.get_tipo_cuenta_display|default:"No especificado" }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Número de Cuenta</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ trabajador.numero_cuenta|default:"No especificado" }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido Variable según tipo de trabajador -->
+            <div class="lg:col-span-2">
+                {% if trabajador.tipo == 'PLANTA' %}
+                <!-- Contrato Actual -->
+                {% if contrato_actual %}
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:px-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-medium text-gray-900">Contrato Actual</h2>
+                            <a href="{% url 'rrhh:contrato_update' trabajador.pk contrato_actual.pk %}" 
+                               class="text-sm text-blue-600 hover:text-blue-900">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+                        <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Tipo de Contrato</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ contrato_actual.get_tipo_contrato_display }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Fecha Inicio</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ contrato_actual.fecha_inicio|date:"d/m/Y" }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Fecha Término</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ contrato_actual.fecha_termino|date:"d/m/Y"|default:"No especificada" }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Salario Base</dt>
+                                <dd class="mt-1 text-sm text-gray-900">${{ contrato_actual.salario_base|floatformat:0 }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Horas Semanales</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ contrato_actual.horas_semanales }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Bonificación Colación</dt>
+                                <dd class="mt-1 text-sm text-gray-900">${{ contrato_actual.bonificacion_colacion|floatformat:0 }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Bonificación Movilidad</dt>
+                                <dd class="mt-1 text-sm text-gray-900">${{ contrato_actual.bonificacion_movilidad|floatformat:0 }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Otros Bonos</dt>
+                                <dd class="mt-1 text-sm text-gray-900">${{ contrato_actual.otros_bonos|floatformat:0 }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Asistencia Semanal -->
+                <div class="bg-white shadow rounded-lg mt-6">
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg font-medium text-gray-900">Asistencia Última Semana</h2>
+                    </div>
+                    <div class="border-t border-gray-200">
+                        {% if asistencia_semanal %}
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Entrada</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Salida</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Horas Extra</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for asistencia in asistencia_semanal %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ asistencia.fecha|date:"d/m/Y" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ asistencia.hora_entrada|time:"H:i" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ asistencia.hora_salida|time:"H:i"|default:"-" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ asistencia.horas_extra }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="text-center py-6">
+                            <p class="text-gray-500">No hay registros de asistencia para la última semana</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% else %}
+                <!-- Tarifas Activas -->
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg font-medium text-gray-900">Tarifas Activas</h2>
+                    </div>
+                    <div class="border-t border-gray-200">
+                        {% if tarifas_activas %}
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Precio Unidad</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha Inicio</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for tarifa in tarifas_activas %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ tarifa.producto.nombre }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        ${{ tarifa.precio_unidad|floatformat:0 }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ tarifa.fecha_inicio|date:"d/m/Y" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="{% url 'rrhh:tarifa_update' trabajador.pk tarifa.pk %}" class="text-blue-600 hover:text-blue-900">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="text-center py-6">
+                            <p class="text-gray-500">No hay tarifas activas</p>
+                            <a href="{% url 'rrhh:tarifa_create' trabajador.pk %}" class="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200">
+                                <i class="fas fa-plus mr-2"></i>Agregar tarifa
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Producción Semanal -->
+                <div class="bg-white shadow rounded-lg mt-6">
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg font-medium text-gray-900">Producción Última Semana</h2>
+                    </div>
+                    <div class="border-t border-gray-200">
+                        {% if produccion_semanal %}
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Producido</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for prod in produccion_semanal %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ prod.produccion__fecha|date:"d/m/Y" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ prod.total_items }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ prod.total_producido }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        ${{ prod.total_pago|floatformat:0 }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="text-center py-6">
+                            <p class="text-gray-500">No hay registros de producción para la última semana</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Observaciones -->
+                {% if trabajador.observaciones %}
+                <div class="bg-white shadow rounded-lg mt-6">
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg font-medium text-gray-900">Observaciones</h2>
+                    </div>
+                    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+                        <p class="text-sm text-gray-900 whitespace-pre-line">{{ trabajador.observaciones }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

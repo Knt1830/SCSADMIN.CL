@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full bg-white p-8 rounded-lg shadow">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'transporte:lista_gastos_vehiculo' %}" 
+                   class="text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-arrow-left mr-2"></i>Volver
+                </a>
+                <h1 class="text-2xl font-bold text-gray-900">Detalle de Gasto</h1>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Información del Gasto -->
+            <div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Información del Gasto</h2>
+                    <dl class="grid grid-cols-2 gap-4">
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Fecha</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {{ gasto.fecha|date:"d/m/Y H:i" }}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Tipo de Gasto</dt>
+                            <dd class="mt-1">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if gasto.tipo == 'combustible' %}bg-green-100 text-green-800
+                                    {% elif gasto.tipo == 'reparacion' %}bg-yellow-100 text-yellow-800
+                                    {% else %}bg-blue-100 text-blue-800{% endif %}">
+                                    {{ gasto.get_tipo_display }}
+                                </span>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Monto</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                ${{ gasto.monto|floatformat:2 }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Información del Vehículo -->
+            <div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Vehículo</h2>
+                    <dl class="grid grid-cols-2 gap-4">
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Modelo</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {{ gasto.vehiculo.modelo }}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Marca</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {{ gasto.vehiculo.marca }}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Patente</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {{ gasto.vehiculo.patente }}
+                            </dd>
+                        </div>
+                        <div>
+                            <a href="{% url 'transporte:detalle_vehiculo' gasto.vehiculo.pk %}" 
+                               class="text-blue-600 hover:text-blue-800 text-sm">
+                                Ver detalles del vehículo
+                            </a>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalles Específicos de Combustible -->
+        {% if gasto.tipo == 'combustible' %}
+        <div class="mt-8">
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Detalles de Combustible</h2>
+                <dl class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Litros</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ gasto.litros|floatformat:2 }} L
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Kilometraje</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ gasto.kilometraje|floatformat:2 }} km
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

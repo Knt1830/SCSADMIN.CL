@@ -1,0 +1,217 @@
+<!-- templates/compras/crear_proveedor.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+        <!-- Header -->
+        <div class="px-4 py-5 sm:p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">
+                        {% if form.instance.pk %}
+                            Editar Proveedor
+                        {% else %}
+                            Nuevo Proveedor
+                        {% endif %}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500">Complete la información del proveedor</p>
+                </div>
+                <a href="{% url 'compras:lista_proveedores' %}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Mensajes -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="px-4 py-3 {% if message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %} mb-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Formulario -->
+        <div class="px-4 py-5 sm:p-6">
+            <form method="POST" class="space-y-6" id="proveedorForm">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <!-- Información básica -->
+                    <div class="col-span-2">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Información Básica</h3>
+                    </div>
+
+                    <!-- Nombre -->
+                    <div>
+                        <label for="{{ form.nombre.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Nombre del Proveedor *
+                        </label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.nombre.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- RUT -->
+                    <div>
+                        <label for="{{ form.rut.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            RUT *
+                        </label>
+                        {{ form.rut }}
+                        {% if form.rut.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.rut.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Tipo de Proveedor -->
+                    <div>
+                        <label for="{{ form.tipo_proveedor.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Tipo de Proveedor *
+                        </label>
+                        {{ form.tipo_proveedor }}
+                        {% if form.tipo_proveedor.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.tipo_proveedor.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div>
+                        <label for="{{ form.telefono.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Teléfono *
+                        </label>
+                        {{ form.telefono }}
+                        {% if form.telefono.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.telefono.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="col-span-2">
+                        <label for="{{ form.direccion.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Dirección *
+                        </label>
+                        {{ form.direccion }}
+                        {% if form.direccion.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.direccion.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Sección de Productos -->
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Productos Suministrados</h3>
+                    <div id="productos-container" class="space-y-4">
+                        {{ productos_form.management_form }}
+                        {% for producto_form in productos_form.forms %}
+                            <div class="producto-form grid grid-cols-1 gap-4 sm:grid-cols-3 items-end border-b border-gray-200 pb-4">
+                                {{ producto_form.id }}
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Producto</label>
+                                    {{ producto_form.producto }}
+                                    {% if producto_form.producto.errors %}
+                                        <p class="mt-2 text-sm text-red-600">{{ producto_form.producto.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Precio Referencia</label>
+                                    {{ producto_form.precio_referencia }}
+                                    {% if producto_form.precio_referencia.errors %}
+                                        <p class="mt-2 text-sm text-red-600">{{ producto_form.precio_referencia.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center">
+                                        {{ producto_form.es_proveedor_principal }}
+                                        <label class="ml-2 block text-sm text-gray-900">Principal</label>
+                                    </div>
+                                    {% if productos_form.can_delete %}
+                                        <div class="flex items-center">
+                                            {{ producto_form.DELETE }}
+                                            <label class="ml-2 text-sm text-red-600 cursor-pointer">Eliminar</label>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" 
+                            onclick="agregarProducto()"
+                            class="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-plus mr-2"></i>
+                        Agregar Producto
+                    </button>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="flex justify-end pt-5">
+                    <button type="submit" 
+                            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        {% if form.instance.pk %}
+                            Actualizar Proveedor
+                        {% else %}
+                            Crear Proveedor
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script para manejar productos -->
+<script>
+   const initialFormsCount = "{{ productos_form.forms|length|default:0 }}";
+    let productoIndex = parseInt(initialFormsCount);
+    
+    function agregarProducto() {
+        const container = document.getElementById('productos-container');
+        const template = document.querySelector('.producto-form').cloneNode(true);
+        
+        // Actualizar IDs y nombres
+        const inputs = template.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.name = input.name.replace(/\d+/, productoIndex);
+            input.id = input.id.replace(/\d+/, productoIndex);
+            input.value = '';
+        });
+        
+        container.appendChild(template);
+        productoIndex++;
+        
+        // Actualizar total forms en management_form
+        const totalForms = document.querySelector('#id_productos-TOTAL_FORMS');
+        totalForms.value = productoIndex;
+    }
+    
+    function eliminarProducto(button) {
+        const form = button.closest('.producto-form');
+        if (document.querySelectorAll('.producto-form').length > 1) {
+            form.remove();
+            // Actualizar total forms
+            const totalForms = document.querySelector('#id_productos-TOTAL_FORMS');
+            totalForms.value = document.querySelectorAll('.producto-form').length;
+        }
+    }
+
+    // Manejar cambio de tipo de proveedor
+    document.getElementById('{{ form.tipo_proveedor.id_for_label }}').addEventListener('change', function(e) {
+        const tipoSeleccionado = e.target.options[e.target.selectedIndex].text;
+        const productosSection = document.getElementById('productos-container').closest('.mt-8');
+        
+        if (tipoSeleccionado.toLowerCase().includes('materia prima')) {
+            // Mostrar solo productos de tipo materia prima
+            const productosSelects = document.querySelectorAll('[id^="id_productos-"][id$="-producto"]');
+            productosSelects.forEach(select => {
+                Array.from(select.options).forEach(option => {
+                    // Aquí puedes agregar la lógica para filtrar productos según el tipo
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

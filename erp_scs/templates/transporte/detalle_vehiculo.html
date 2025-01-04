@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full bg-white p-8 rounded-lg shadow">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'transporte:lista_vehiculos' %}" 
+                   class="text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-arrow-left mr-2"></i>Volver
+                </a>
+                <h1 class="text-2xl font-bold text-gray-900">Detalles del Vehículo</h1>
+            </div>
+            <div class="flex space-x-4">
+                <a href="{% url 'transporte:editar_vehiculo' vehiculo.pk %}" 
+                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
+                    <i class="fas fa-edit mr-2"></i>Editar
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Información del Vehículo -->
+            <div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Información General</h2>
+                    <dl class="grid grid-cols-2 gap-4">
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Patente</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ vehiculo.patente }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Modelo</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ vehiculo.modelo }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Marca</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ vehiculo.marca }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Color</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ vehiculo.get_color_display }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Año</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ vehiculo.año }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Estado</dt>
+                            <dd class="mt-1">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if vehiculo.estado == 'disponible' %}bg-green-100 text-green-800
+                                    {% elif vehiculo.estado == 'en_uso' %}bg-yellow-100 text-yellow-800
+                                    {% else %}bg-red-100 text-red-800{% endif %}">
+                                    {{ vehiculo.get_estado_display }}
+                                </span>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500">Kilometraje Actual</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {{ vehiculo.kilometraje_actual|floatformat:2 }} km
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Información de Chofer Asignado -->
+            <div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Chofer Asignado</h2>
+                    {% if chofer_asignado %}
+                        <dl class="grid grid-cols-2 gap-4">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Nombre</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ chofer_asignado.nombre }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">RUT</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ chofer_asignado.rut }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Teléfono</dt>
+                                <dd class="mt-1 text-sm text-gray-900">{{ chofer_asignado.telefono }}</dd>
+                            </div>
+                        </dl>
+                    {% else %}
+                        <p class="text-sm text-gray-500">No hay chofer asignado actualmente</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Gastos -->
+        <div class="mt-8">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Historial de Gastos</h2>
+            {% if gastos %}
+                <div class="overflow-x-auto">
+                    <table class="w-full whitespace-nowrap">
+                        <thead>
+                            <tr class="bg-gray-50 border-b">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Monto</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Kilometraje</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for gasto in gastos %}
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-900">
+                                    {{ gasto.fecha|date:"d/m/Y H:i" }}
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-900">
+                                    {{ gasto.get_tipo_display }}
+                                </td>
+                                <td class="px-6 py-4 text-right text-sm text-gray-900">
+                                    ${{ gasto.monto|floatformat:2 }}
+                                </td>
+                                <td class="px-6 py-4 text-right text-sm text-gray-900">
+                                    {% if gasto.kilometraje %}
+                                        {{ gasto.kilometraje|floatformat:2 }} km
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-sm text-gray-500">No hay gastos registrados para este vehículo</p>
+            {% endif %}
+
+            <!-- Totales de Gastos -->
+            <div class="mt-4 text-right">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Total de Gastos: ${{ totales_gastos.0.total|floatformat:2|default:"0.00" }}
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
