@@ -2214,3 +2214,8 @@ Traceback (most recent call last):
 django.urls.exceptions.NoReverseMatch: Reverse for '' not found. '' is not a valid view function or pattern name.
 INFO 2025-01-04 18:04:13,420 autoreload 6012 15792 Watching for file changes with StatReloader
 WARNING 2025-01-04 18:17:33,055 log 6012 6016 Not Found: /base
+INFO 2025-01-04 21:31:22,047 autoreload 23396 23216 Watching for file changes with StatReloader
+INFO 2025-01-04 21:34:43,417 autoreload 24892 5604 Watching for file changes with StatReloader
+WARNING 2025-01-04 21:34:50,995 log 24892 22944 Not Found: /favicon.ico
+INFO 2025-01-04 22:04:03,557 autoreload 24892 5604 C:\Users\tensa\OneDrive\Escritorio\scs_v1.2\erp_scs\erp_scs\settings.py changed, reloading.
+INFO 2025-01-04 22:04:05,272 autoreload 19008 10232 Watching for file changes with StatReloader
