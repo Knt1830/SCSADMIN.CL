@@ -9,7 +9,7 @@ class Usuario(AbstractUser):
         ('inventario', 'Inventario'),
         ('transporte', 'Transporte'),
         ('ventas', 'Ventas'),
-        ('rrhh', 'RRSS'),
+        ('rrhh', 'RRHH'),
         ('finanzas', 'Finanzas'),
     ]
     
