@@ -52,6 +52,11 @@ def dashboard_view(request):
                 'code': 'rrhh',
                 'name': 'RRHH'
             })
+        if modulo_code == 'finanzas':
+            modulos_disponibles.append({
+                'code': 'finanzas',
+                'name': 'Finanzas'
+            })    
    context = {
         'modulos': modulos_disponibles,
         'user': request.user

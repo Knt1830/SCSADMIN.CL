@@ -28,5 +28,6 @@ urlpatterns = [
     path('transporte/', include('transporte.urls', namespace='transporte')),
     path('produccion/', include('produccion.urls', namespace='produccion')),
     path('rrhh/', include('rrhh.urls', namespace='rrhh')),
+    path('finanzas/', include('finanzas.urls', namespace='finanzas')),
 ] + static(settings.STATIC_URL, docu11ment_root=settings.STATIC_ROOT)
 

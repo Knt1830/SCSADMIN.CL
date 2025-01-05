@@ -48,7 +48,7 @@
                 </div>
                 <div class="topnav">
                         {% for modulo in modulos %}
-                            <a class="nav-link" href="{% if modulo.code == 'inventario' %}{% url 'inventario:home' %}{% elif modulo.code == 'transporte' %}{% url 'transporte:home' %}{% elif modulo.code == 'ventas' %}{% url 'ventas:home' %}{% elif modulo.code == 'compras' %}{% url 'compras:home' %}{% elif modulo.code == 'produccion' %}{% url 'produccion:home' %}{% elif modulo.code == 'rrhh' %}{% url 'rrhh:home' %}{% else %}#{% endif %}">
+                            <a class="nav-link" href="{% if modulo.code == 'inventario' %}{% url 'inventario:home' %}{% elif modulo.code == 'transporte' %}{% url 'transporte:home' %}{% elif modulo.code == 'ventas' %}{% url 'ventas:home' %}{% elif modulo.code == 'compras' %}{% url 'compras:home' %}{% elif modulo.code == 'produccion' %}{% url 'produccion:home' %}{% elif modulo.code == 'rrhh' %}{% url 'rrhh:home' %}{% elif modulo.code == 'finanzas' %}{% url 'finanzas:home' %}{% else %}#{% endif %}">
                                 {{ modulo.name }}   
                                 <!--i class="fas {% if modulo.code == 'compras' %}fa-shopping-cart
                                            {% elif modulo.code == 'produccion' %}fa-industry
