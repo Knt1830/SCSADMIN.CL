@@ -24,7 +24,7 @@ class Lote(models.Model):
     
     # Campos base
     codigo = models.CharField(
-        max_length=20,
+        max_length=30,
         unique=True,
         help_text="Código único del lote (ej: LOT-2024-001)"
     )

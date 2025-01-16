@@ -2219,3 +2219,839 @@ INFO 2025-01-04 21:34:43,417 autoreload 24892 5604 Watching for file changes wit
 WARNING 2025-01-04 21:34:50,995 log 24892 22944 Not Found: /favicon.ico
 INFO 2025-01-04 22:04:03,557 autoreload 24892 5604 C:\Users\tensa\OneDrive\Escritorio\scs_v1.2\erp_scs\erp_scs\settings.py changed, reloading.
 INFO 2025-01-04 22:04:05,272 autoreload 19008 10232 Watching for file changes with StatReloader
+INFO 2025-01-06 03:48:23,008 autoreload 22488 2900 Watching for file changes with StatReloader
+WARNING 2025-01-06 03:48:24,632 log 22488 3204 Not Found: /favicon.ico
+ERROR 2025-01-06 03:48:43,723 log 22488 3204 Internal Server Error: /rrhh/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: rrhh_trabajador.categoria
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\rrhh\views.py", line 27, in home
+    ).count()
+      ^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\query.py", line 620, in count
+    return self.query.get_count(using=self.db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 630, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 616, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "C:\Python311\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: rrhh_trabajador.categoria
+INFO 2025-01-13 13:25:31,581 autoreload 18796 18800 Watching for file changes with StatReloader
+WARNING 2025-01-13 13:25:36,197 log 18796 18580 Not Found: /favicon.ico
+ERROR 2025-01-13 13:29:46,461 log 18796 2784 Internal Server Error: /rrhh/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: rrhh_trabajador.categoria
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\rrhh\views.py", line 27, in home
+    ).count()
+      ^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\query.py", line 620, in count
+    return self.query.get_count(using=self.db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 630, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 616, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "C:\Python311\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: rrhh_trabajador.categoria
+ERROR 2025-01-13 13:34:50,149 log 18796 2784 Internal Server Error: /rrhh/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: rrhh_trabajador.categoria
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\rrhh\views.py", line 27, in home
+    ).count()
+      ^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\query.py", line 620, in count
+    return self.query.get_count(using=self.db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 630, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 616, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "C:\Python311\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: rrhh_trabajador.categoria
+ERROR 2025-01-13 13:41:22,382 log 18796 20916 Internal Server Error: /rrhh/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: rrhh_pagomensual
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\rrhh\views.py", line 32, in home
+    ).count()
+      ^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\query.py", line 620, in count
+    return self.query.get_count(using=self.db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 630, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\query.py", line 616, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "C:\Python311\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Python311\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: rrhh_pagomensual
+INFO 2025-01-13 20:12:02,151 autoreload 3952 22980 Watching for file changes with StatReloader
+WARNING 2025-01-13 20:12:04,548 log 3952 8144 Not Found: /favicon.ico
+ERROR 2025-01-13 20:20:05,611 log 3952 8144 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 182, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 151, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 141, in form_valid
+    if not materias_primas_formset.is_valid():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\forms\formsets.py", line 384, in is_valid
+    self.errors
+  File "C:\Python311\Lib\site-packages\django\forms\formsets.py", line 366, in errors
+    self.full_clean()
+  File "C:\Python311\Lib\site-packages\django\forms\formsets.py", line 429, in full_clean
+    form_errors = form.errors
+                  ^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\forms\forms.py", line 192, in errors
+    self.full_clean()
+  File "C:\Python311\Lib\site-packages\django\forms\forms.py", line 327, in full_clean
+    self._post_clean()
+  File "C:\Python311\Lib\site-packages\django\forms\models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "C:\Python311\Lib\site-packages\django\db\models\base.py", line 1626, in full_clean
+    self.clean()
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py", line 296, in clean
+    self.producto.validar_stock(self.cantidad)
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\inventario\models.py", line 73, in validar_stock
+    if cantidad < 0:
+       ^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'int'
+ERROR 2025-01-13 20:21:44,785 log 3952 8144 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 182, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 151, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 141, in form_valid
+    if not materias_primas_formset.is_valid():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\forms\formsets.py", line 384, in is_valid
+    self.errors
+  File "C:\Python311\Lib\site-packages\django\forms\formsets.py", line 366, in errors
+    self.full_clean()
+  File "C:\Python311\Lib\site-packages\django\forms\formsets.py", line 429, in full_clean
+    form_errors = form.errors
+                  ^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\forms\forms.py", line 192, in errors
+    self.full_clean()
+  File "C:\Python311\Lib\site-packages\django\forms\forms.py", line 327, in full_clean
+    self._post_clean()
+  File "C:\Python311\Lib\site-packages\django\forms\models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "C:\Python311\Lib\site-packages\django\db\models\base.py", line 1626, in full_clean
+    self.clean()
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py", line 292, in clean
+    if self.producto.tipo_producto != 'MATERIA':
+       ^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 267, in __get__
+    raise self.RelatedObjectDoesNotExist(
+produccion.models.MateriaPrimaUtilizada.producto.RelatedObjectDoesNotExist: MateriaPrimaUtilizada has no producto.
+INFO 2025-01-15 04:01:50,725 autoreload 9916 13032 Watching for file changes with StatReloader
+WARNING 2025-01-15 04:02:04,312 log 9916 1892 Not Found: /favicon.ico
+INFO 2025-01-15 04:16:14,176 autoreload 9916 13032 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\compras\forms.py changed, reloading.
+INFO 2025-01-15 04:16:14,525 autoreload 15724 5548 Watching for file changes with StatReloader
+INFO 2025-01-15 04:17:26,125 autoreload 15724 5548 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\compras\forms.py changed, reloading.
+INFO 2025-01-15 04:17:26,454 autoreload 14800 13168 Watching for file changes with StatReloader
+ERROR 2025-01-15 04:17:29,516 log 14800 11396 Internal Server Error: /compras/ordenes/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\compras\views.py", line 272, in crear_orden
+    form = OrdenCompraForm()
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\compras\forms.py", line 103, in __init__
+    self.fields['fecha_emision'].initial = date.today()
+                                           ^^^^
+NameError: name 'date' is not defined
+INFO 2025-01-15 04:18:53,512 autoreload 14800 13168 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\compras\forms.py changed, reloading.
+INFO 2025-01-15 04:18:53,856 autoreload 18140 9324 Watching for file changes with StatReloader
+INFO 2025-01-15 04:21:22,178 autoreload 18140 9324 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:21:22,588 autoreload 18812 12584 Watching for file changes with StatReloader
+ERROR 2025-01-15 04:21:23,224 log 18812 5232 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 122, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 94, in __init__
+    self.fields['fecha_creacion'].initial = date.today()
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'fecha_creacion'
+ERROR 2025-01-15 04:21:36,999 log 18812 5232 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 122, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 94, in __init__
+    self.fields['fecha_emision'].initial = date.today()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'fecha_creacion'
+INFO 2025-01-15 04:21:37,087 autoreload 18812 12584 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:21:37,443 autoreload 4728 5728 Watching for file changes with StatReloader
+ERROR 2025-01-15 04:21:38,012 log 4728 4136 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 122, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 94, in __init__
+    self.fields['fecha_emision'].initial = date.today()
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'fecha_emision'
+INFO 2025-01-15 04:21:40,701 autoreload 4728 5728 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:21:41,029 autoreload 3688 4536 Watching for file changes with StatReloader
+ERROR 2025-01-15 04:21:44,120 log 3688 17172 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 122, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 94, in __init__
+    self.fields['fecha_emision'].initial = date.today()
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'fecha_emision'
+INFO 2025-01-15 04:21:45,362 autoreload 3688 4536 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:21:45,689 autoreload 4128 17896 Watching for file changes with StatReloader
+INFO 2025-01-15 04:22:16,526 autoreload 4128 17896 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:22:16,872 autoreload 15176 16580 Watching for file changes with StatReloader
+INFO 2025-01-15 04:22:59,923 autoreload 15176 16580 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:23:00,288 autoreload 10160 7460 Watching for file changes with StatReloader
+ERROR 2025-01-15 04:23:00,920 log 10160 17916 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 122, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 95, in __init__
+    self.fields['hora_inicio'].initial = time.now()
+                                         ^^^^^^^^
+AttributeError: type object 'datetime.time' has no attribute 'now'
+INFO 2025-01-15 04:24:27,188 autoreload 10160 7460 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:24:27,534 autoreload 7708 1576 Watching for file changes with StatReloader
+INFO 2025-01-15 04:24:47,002 autoreload 7708 1576 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:24:47,397 autoreload 18360 17760 Watching for file changes with StatReloader
+ERROR 2025-01-15 04:24:48,190 log 18360 14800 Internal Server Error: /produccion/produccion/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 122, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 95, in __init__
+    self.fields['hora_inicio'].initial = datetime.time()
+                                         ^^^^^^^^^^^^^^^
+TypeError: unbound method datetime.time() needs an argument
+INFO 2025-01-15 04:25:47,771 autoreload 18360 17760 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:25:48,130 autoreload 7808 12620 Watching for file changes with StatReloader
+INFO 2025-01-15 04:25:52,423 autoreload 7808 12620 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 04:25:52,779 autoreload 4264 1212 Watching for file changes with StatReloader
+INFO 2025-01-15 05:26:10,511 autoreload 4264 1212 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py changed, reloading.
+INFO 2025-01-15 05:26:11,030 autoreload 18932 7072 Watching for file changes with StatReloader
+INFO 2025-01-15 05:26:58,135 autoreload 18932 7072 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py changed, reloading.
+INFO 2025-01-15 05:26:58,482 autoreload 17864 12316 Watching for file changes with StatReloader
+INFO 2025-01-15 05:28:27,284 autoreload 17864 12316 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\admin.py changed, reloading.
+INFO 2025-01-15 05:28:27,646 autoreload 19940 9580 Watching for file changes with StatReloader
+INFO 2025-01-15 05:30:18,253 autoreload 11152 4704 Watching for file changes with StatReloader
+INFO 2025-01-15 05:35:38,518 autoreload 11152 4704 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py changed, reloading.
+INFO 2025-01-15 05:35:38,883 autoreload 15052 2852 Watching for file changes with StatReloader
+INFO 2025-01-15 05:35:53,470 autoreload 15052 2852 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\admin.py changed, reloading.
+INFO 2025-01-15 05:35:53,856 autoreload 12564 13212 Watching for file changes with StatReloader
+INFO 2025-01-15 05:35:55,105 autoreload 12564 13212 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py changed, reloading.
+INFO 2025-01-15 05:35:55,463 autoreload 4832 4796 Watching for file changes with StatReloader
+INFO 2025-01-15 05:35:57,687 autoreload 4832 4796 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py changed, reloading.
+INFO 2025-01-15 05:35:58,030 autoreload 2404 10600 Watching for file changes with StatReloader
+INFO 2025-01-15 05:36:04,360 autoreload 2404 10600 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:36:04,691 autoreload 5880 20132 Watching for file changes with StatReloader
+INFO 2025-01-15 05:36:08,956 autoreload 5880 20132 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:36:09,335 autoreload 14432 8796 Watching for file changes with StatReloader
+INFO 2025-01-15 05:45:22,302 autoreload 14432 8796 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:45:22,672 autoreload 6900 5184 Watching for file changes with StatReloader
+INFO 2025-01-15 05:45:43,388 autoreload 6900 5184 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:45:43,756 autoreload 3088 19076 Watching for file changes with StatReloader
+INFO 2025-01-15 05:47:07,804 autoreload 3088 19076 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:47:08,138 autoreload 19472 20064 Watching for file changes with StatReloader
+INFO 2025-01-15 05:47:16,588 autoreload 19472 20064 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:47:16,939 autoreload 18472 9328 Watching for file changes with StatReloader
+ERROR 2025-01-15 05:47:17,336 log 18472 2292 Internal Server Error: /produccion/lotes/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 57, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 47, in __init__
+    self.fields['codigo'].initial = test
+                                    ^^^^
+NameError: name 'test' is not defined
+ERROR 2025-01-15 05:47:22,154 log 18472 2292 Internal Server Error: /produccion/lotes/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 57, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 47, in __init__
+    self.fields['codigo'].initial = "test"
+                                    ^^^^
+NameError: name 'test' is not defined
+INFO 2025-01-15 05:47:22,236 autoreload 18472 9328 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:47:22,570 autoreload 2964 15148 Watching for file changes with StatReloader
+INFO 2025-01-15 05:47:50,281 autoreload 2964 15148 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:47:50,621 autoreload 17216 17960 Watching for file changes with StatReloader
+INFO 2025-01-15 05:47:52,867 autoreload 17216 17960 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:47:53,233 autoreload 19572 368 Watching for file changes with StatReloader
+INFO 2025-01-15 05:47:58,516 autoreload 19572 368 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:47:58,859 autoreload 5168 1588 Watching for file changes with StatReloader
+INFO 2025-01-15 05:48:06,191 autoreload 5168 1588 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:48:06,544 autoreload 1804 8624 Watching for file changes with StatReloader
+INFO 2025-01-15 05:48:14,904 autoreload 1804 8624 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:48:15,287 autoreload 12204 4696 Watching for file changes with StatReloader
+ERROR 2025-01-15 05:48:16,773 log 12204 20248 Internal Server Error: /produccion/lotes/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 57, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 47, in __init__
+    self.fields['codigo'].initial = OC-date.today().year
+                                    ^^
+NameError: name 'OC' is not defined
+INFO 2025-01-15 05:48:29,864 autoreload 12204 4696 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:48:30,196 autoreload 5228 8784 Watching for file changes with StatReloader
+ERROR 2025-01-15 05:48:31,210 log 5228 10812 Internal Server Error: /produccion/lotes/crear/
+Traceback (most recent call last):
+  File "C:\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py", line 57, in get_context_data
+    context = super().get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Python311\Lib\site-packages\django\views\generic\edit.py", line 37, in get_form
+    return form_class(**self.get_form_kwargs())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py", line 47, in __init__
+    self.fields['codigo'].initial = "OC-"+date.today().year
+                                    ~~~~~^~~~~~~~~~~~~~~~~~
+TypeError: can only concatenate str (not "int") to str
+INFO 2025-01-15 05:48:39,567 autoreload 5228 8784 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:48:39,903 autoreload 5728 5808 Watching for file changes with StatReloader
+INFO 2025-01-15 05:49:53,456 autoreload 5728 5808 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:49:53,814 autoreload 17212 5988 Watching for file changes with StatReloader
+INFO 2025-01-15 05:50:22,617 autoreload 17212 5988 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:50:22,996 autoreload 18160 15272 Watching for file changes with StatReloader
+INFO 2025-01-15 05:50:46,646 autoreload 18160 15272 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:50:46,996 autoreload 20348 19700 Watching for file changes with StatReloader
+INFO 2025-01-15 05:50:51,253 autoreload 20348 19700 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:50:51,584 autoreload 11848 13276 Watching for file changes with StatReloader
+INFO 2025-01-15 05:51:42,942 autoreload 11848 13276 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:51:43,286 autoreload 10252 5804 Watching for file changes with StatReloader
+INFO 2025-01-15 05:58:37,287 autoreload 10252 5804 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 05:58:37,677 autoreload 2720 20348 Watching for file changes with StatReloader
+INFO 2025-01-15 06:14:53,023 autoreload 2720 20348 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py changed, reloading.
+INFO 2025-01-15 06:14:53,383 autoreload 2452 2612 Watching for file changes with StatReloader
+INFO 2025-01-15 06:20:10,898 autoreload 2452 2612 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 06:20:11,242 autoreload 2524 20024 Watching for file changes with StatReloader
+INFO 2025-01-15 06:20:19,679 autoreload 2524 20024 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 06:20:20,035 autoreload 2644 1084 Watching for file changes with StatReloader
+INFO 2025-01-15 06:32:52,409 autoreload 2644 1084 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 06:32:52,785 autoreload 6316 9732 Watching for file changes with StatReloader
+INFO 2025-01-15 06:33:05,363 autoreload 6316 9732 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 06:33:05,716 autoreload 13808 19792 Watching for file changes with StatReloader
+INFO 2025-01-15 06:37:43,909 autoreload 13808 19792 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py changed, reloading.
+INFO 2025-01-15 06:37:44,255 autoreload 13716 17676 Watching for file changes with StatReloader
+INFO 2025-01-15 06:39:53,861 autoreload 13716 17676 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\models.py changed, reloading.
+INFO 2025-01-15 06:39:54,193 autoreload 10540 4464 Watching for file changes with StatReloader
+INFO 2025-01-15 15:11:52,703 autoreload 4068 11816 Watching for file changes with StatReloader
+WARNING 2025-01-15 15:11:54,472 log 4068 13004 Not Found: /favicon.ico
+INFO 2025-01-15 15:31:22,023 autoreload 4068 11816 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\compras\views.py changed, reloading.
+INFO 2025-01-15 15:31:22,730 autoreload 10064 10596 Watching for file changes with StatReloader
+INFO 2025-01-15 15:31:40,309 autoreload 10064 10596 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py changed, reloading.
+INFO 2025-01-15 15:31:40,697 autoreload 17668 11776 Watching for file changes with StatReloader
+INFO 2025-01-15 15:32:08,340 autoreload 17668 11776 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 15:32:08,721 autoreload 16428 336 Watching for file changes with StatReloader
+INFO 2025-01-15 15:32:14,040 autoreload 16428 336 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\forms.py changed, reloading.
+INFO 2025-01-15 15:32:14,402 autoreload 14176 17900 Watching for file changes with StatReloader
+INFO 2025-01-16 08:54:20,863 autoreload 11660 18928 Watching for file changes with StatReloader
+WARNING 2025-01-16 08:54:22,366 log 11660 17524 Not Found: /favicon.ico
+INFO 2025-01-16 08:57:39,354 autoreload 13908 10108 Watching for file changes with StatReloader
+INFO 2025-01-16 09:13:04,938 autoreload 7196 6856 Watching for file changes with StatReloader
+INFO 2025-01-16 10:42:48,653 autoreload 7196 6856 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py changed, reloading.
+INFO 2025-01-16 10:42:49,024 autoreload 2328 3040 Watching for file changes with StatReloader
+INFO 2025-01-16 10:45:29,194 autoreload 2328 3040 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py changed, reloading.
+INFO 2025-01-16 10:45:29,613 autoreload 9736 10352 Watching for file changes with StatReloader
+INFO 2025-01-16 10:45:54,408 autoreload 9736 10352 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py changed, reloading.
+INFO 2025-01-16 10:45:54,756 autoreload 6972 12260 Watching for file changes with StatReloader
+INFO 2025-01-16 10:46:30,622 autoreload 6972 12260 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py changed, reloading.
+INFO 2025-01-16 10:46:30,960 autoreload 176 11744 Watching for file changes with StatReloader
+INFO 2025-01-16 10:46:34,224 autoreload 176 11744 C:\Programacion\aaaProyectos\Angel\SCSADMIN.CL\erp_scs\produccion\views.py changed, reloading.
+INFO 2025-01-16 10:46:34,563 autoreload 12276 10980 Watching for file changes with StatReloader
+INFO 2025-01-16 10:46:41,430 autoreload 3316 8780 Watching for file changes with StatReloader

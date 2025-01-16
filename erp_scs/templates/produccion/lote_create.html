@@ -69,10 +69,10 @@
                                 <option value="">Seleccione una orden de compra</option>
                                 {% for orden in ordenes_compra %}
                                     <option value="{{ orden.id }}" 
-                                            data-codigo="{{ orden.codigo }}"
+                                            data-codigo="{{ orden.numero_orden }}"
                                             data-proveedor="{{ orden.proveedor.nombre }}"
                                             {% if form.orden_compra.value|stringformat:"s" == orden.id|stringformat:"s" %}selected{% endif %}>
-                                        {{ orden.codigo }} - {{ orden.proveedor.nombre }}
+                                        {{ orden.numero_orden }} - {{ orden.proveedor.nombre }}
                                     </option>
                                 {% endfor %}
                             </select>

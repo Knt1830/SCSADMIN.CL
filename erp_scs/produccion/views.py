@@ -62,10 +62,6 @@ class LoteCreateView(LoginRequiredMixin, CreateView):
         ).select_related('proveedor').order_by('-fecha_creacion')
         return context
     
-        
-    
-
-
     def form_valid(self, form):
         form.instance.creado_por = self.request.user
         messages.success(self.request, 'Lote creado exitosamente.')
@@ -223,7 +219,7 @@ class ProduccionDiariaForm(forms.ModelForm):
         # Configurar el queryset de trabajadores
         self.fields['trabajador'].queryset = self.fields['trabajador'].queryset.filter(
             is_active=True,
-            groups__name__in=['Temporeros', 'Trabajador', 'trabajador']
+            groups__name__in=['TEMPORERO', 'TE']
         ).exclude(
             is_staff=True
         ).distinct()

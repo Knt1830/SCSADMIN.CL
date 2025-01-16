@@ -1,5 +1,6 @@
 # forms.py
 from django import forms
+from datetime import date, datetime
 from .models import Lote, ProduccionDiaria, ItemProduccion
 from compras.models import OrdenCompra
 from django.forms import inlineformset_factory
@@ -40,15 +41,7 @@ class LoteForm(forms.ModelForm):
             field.widget.attrs.update({
                 'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
             })
-            
-        self.fields['orden_compra'].queryset = queryset.order_by('-fecha_emision')
-        self.fields['orden_compra'].empty_label = "Seleccione una orden de compra"
-        
-        # Agregar clases de estilo
-        for field in self.fields.values():
-            field.widget.attrs.update({
-                'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
-            })
+
 class MateriaPrimaFormSet(forms.BaseInlineFormSet):
     def clean(self):
         super().clean()
@@ -71,7 +64,7 @@ MateriaPrimaUtilizadaFormSet = inlineformset_factory(
     MateriaPrimaUtilizada,
     formset=MateriaPrimaFormSet,
     fields=['producto', 'cantidad'],
-    extra=1,
+    extra=0,
     can_delete=True,
     min_num=1,
     validate_min=True
@@ -89,7 +82,9 @@ class ProduccionDiariaForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  
+        self.fields['fecha'].initial = date.today()
+        self.fields['hora_inicio'].initial = datetime.now().strftime('%H:%M')
         self.fields['hora_fin'].required = False
         self.fields['merma_kg'].required = False
         self.fields['observaciones'].required = False
@@ -128,7 +123,7 @@ ItemProduccionFormSet = forms.inlineformset_factory(
     ProduccionDiaria, 
     ItemProduccion,
     form=ItemProduccionForm,
-    extra=1,
+    extra=0,
     can_delete=True,
     min_num=1,
     validate_min=True

@@ -1,4 +1,5 @@
 # compras/forms.py
+from datetime import date
 from django import forms
 from .models import (
     TipoProveedor, 
@@ -100,6 +101,7 @@ class OrdenCompraForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['fecha_emision'].initial = date.today()
         self.fields['proveedor'].queryset = Proveedor.objects.filter(activo=True)
         self.fields['proveedor'].widget.attrs.update({
             'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'

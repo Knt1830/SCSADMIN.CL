@@ -1,182 +1,136 @@
+<!-- templates/rrhh/home.html -->
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-100 py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
+<div class="min-h-screen bg-gray-100">
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Mensaje de bienvenida -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">
-                Recursos Humanos
-            </h1>
-            <p class="mt-2 text-sm text-gray-600">
-                Gestión de personal, producción y liquidaciones
-            </p>
+            <h1 class="text-3xl font-bold text-gray-900">Recursos Humanos</h1>
+            <p class="mt-2 text-gray-600">Gestión de personal y pagos</p>
         </div>
 
-        <!-- Estadísticas Resumen -->
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-            <!-- Total Trabajadores -->
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-users text-2xl text-blue-600"></i>
-                        </div>
-                        <div class="ml-5">
-                            <p class="text-gray-500 text-sm font-medium">Total Trabajadores</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ total_trabajadores }}</p>
+        <!-- Tarjetas de acceso rápido -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Gestión de Trabajadores -->
+            <a href="{% url 'rrhh:trabajadores' %}" class="transform hover:scale-105 transition-transform duration-200">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-users text-2xl text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Trabajadores</h3>
+                                <p class="text-sm text-gray-500">Registro y búsqueda</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Trabajadores Activos -->
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-user-check text-2xl text-green-600"></i>
-                        </div>
-                        <div class="ml-5">
-                            <p class="text-gray-500 text-sm font-medium">Trabajadores Activos</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ trabajadores_activos }}</p>
+            <!-- Pagos Mensuales -->
+            <a href="{% url 'rrhh:pagos_mensuales' %}" class="transform hover:scale-105 transition-transform duration-200">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-money-check-alt text-2xl text-green-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Pagos Mensuales</h3>
+                                <p class="text-sm text-gray-500">Personal fijo</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Producción Pendiente -->
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-clock text-2xl text-yellow-600"></i>
-                        </div>
-                        <div class="ml-5">
-                            <p class="text-gray-500 text-sm font-medium">Liquidaciones Pendientes</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ liquidaciones_pendientes }}</p>
+            <!-- Pagos Temporales -->
+            <a href="{% url 'rrhh:pagos_temporales' %}" class="transform hover:scale-105 transition-transform duration-200">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-clock text-2xl text-orange-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Pagos Temporales</h3>
+                                <p class="text-sm text-gray-500">Personal temporal</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
+
+            <!-- Reportes -->
+            <a href="{% url 'rrhh:reportes' %}" class="transform hover:scale-105 transition-transform duration-200">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-chart-bar text-2xl text-purple-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Reportes</h3>
+                                <p class="text-sm text-gray-500">Producción y pagos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
 
-        <!-- Acciones Rápidas -->
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-            <!-- Gestión de Personal -->
+        <!-- Dashboard de resumen -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Panel izquierdo: Resumen de personal -->
             <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Gestión de Personal</h3>
-                    <div class="space-y-3">
-                        <a href="{% url 'rrhh:trabajador_list' %}" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-users text-blue-600 mr-3"></i>
-                                <span class="text-gray-700">Lista de Trabajadores</span>
-                            </div>
-                        </a>
-                        <a href="{% url 'rrhh:trabajador_form' %}" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-user-plus text-green-600 mr-3"></i>
-                                <span class="text-gray-700">Nuevo Trabajador</span>
-                            </div>
-                        </a>
-                        <a href="{% url 'rrhh:contrato_list' %}" class="block p-3 rounded-lg hover:bg-gray-50">
-                             <div class="flex items-center">
-                                 <i class="fas fa-id-card text-purple-600 mr-3"></i>
-                                 <span class="text-gray-700">Contratos</span>
-                             </div>
-                         </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producción -->
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Producción</h3>
-                    <div class="space-y-3">
-                        <a href="{% url 'produccion:produccion_list' %}" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-chart-line text-blue-600 mr-3"></i>
-                                <span class="text-gray-700">Consulta de Producción</span>
-                            </div>
-                        </a>
-                        <a href="{% url 'rrhh:trabajador_list' %}?tipo=TEMPORERO" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-file-invoice-dollar text-green-600 mr-3"></i>
-                                <span class="text-gray-700">Tarifas de Producción</span>
-                            </div>
-                        </a>
-                        <a href="{% url 'rrhh:produccion_trabajador_list' %}" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-tasks text-orange-600 mr-3"></i>
-                                <span class="text-gray-700">Reporte de Productividad</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Liquidaciones -->
-            <div class="bg-white overflow-hidden shadow rounded-lg">
-                <div class="p-5">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Liquidaciones</h3>
-                    <div class="space-y-3">
-                        <a href="{% url 'rrhh:liquidacion_list' %}" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-file-alt text-blue-600 mr-3"></i>
-                                <span class="text-gray-700">Lista de Liquidaciones</span>
-                            </div>
-                        </a>
-                        <a href="{% url 'rrhh:liquidacion_create' %}" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-plus text-green-600 mr-3"></i>
-                                <span class="text-gray-700">Nueva Liquidación</span>
-                            </div>
-                        </a>
-                        <a href="#" class="block p-3 rounded-lg hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <i class="fas fa-history text-purple-600 mr-3"></i>
-                                <span class="text-gray-700">Historial de Pagos</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Últimos Registros -->
-        <div class="bg-white shadow rounded-lg">
-            <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                    Últimas Actividades
-                </h3>
-            </div>
-            <div class="px-4 py-5 sm:p-6">
-                <div class="flow-root">
-                    <ul class="-my-5 divide-y divide-gray-200">
-                        {% for actividad in ultimas_actividades %}
-                        <li class="py-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 truncate">
-                                        {{ actividad.descripcion }}
-                                    </p>
-                                    <p class="text-sm text-gray-500">
-                                        {{ actividad.fecha }}
-                                    </p>
-                                </div>
-                                <div>
-                                    <a href="{{ actividad.url }}" 
-                                       class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
-                                        Ver detalles
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Personal Activo</h3>
+                    <div class="space-y-4">
+                        {% for categoria in categorias %}
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">{{ categoria.nombre }}</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                                {{ categoria.total }}
+                            </span>
+                        </div>
                         {% endfor %}
-                    </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel derecho: Pagos pendientes -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Pagos Pendientes</h3>
+                    <div class="space-y-4">
+                        <!-- Pagos mensuales pendientes -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Pagos Mensuales</span>
+                            <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                                {{ pagos_mensuales_pendientes }}
+                            </span>
+                        </div>
+                        <!-- Pagos temporales pendientes -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Pagos Temporales</span>
+                            <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                                {{ pagos_temporales_pendientes }}
+                            </span>
+                        </div>
+                        <!-- Producción semanal -->
+                        <div class="mt-6">
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">Producción Semanal Actual</h4>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Total Unidades</span>
+                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                                    {{ produccion_semanal.total_unidades }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
