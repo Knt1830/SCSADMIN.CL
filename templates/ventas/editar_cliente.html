@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full">
+        <div class="bg-white shadow rounded-lg">
+            <div class="p-8 max-w-4xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900">
+                        {% if cliente %}
+                            Editar Cliente
+                        {% else %}
+                            Registrar Nuevo Cliente
+                        {% endif %}
+                    </h2>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="mt-4 p-4 
+                                {% if message.tags == 'success' %}bg-green-100 border-green-400 text-green-700
+                                {% elif message.tags == 'error' %}bg-red-100 border-red-400 text-red-700
+                                {% endif %} 
+                                rounded">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Nombre Completo*</label>
+                            <input type="text" name="nombre" required
+                                value="{{ cliente.nombre|default:'' }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">RUT*</label>
+                            <input type="text" name="rut" required
+                                value="{{ cliente.rut|default:'' }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Teléfono*</label>
+                            <input type="text" name="telefono" required
+                                value="{{ cliente.telefono|default:'' }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" name="email"
+                                value="{{ cliente.email|default:'' }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Dirección</label>
+                        <textarea name="direccion" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-24">{{ cliente.direccion|default:'' }}</textarea>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-8">
+                        <a href="{% url 'ventas:lista_clientes' %}" 
+                           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Cancelar
+                        </a>
+                        <button type="submit" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                            {% if cliente %}
+                                Actualizar Cliente
+                            {% else %}
+                                Crear Cliente
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

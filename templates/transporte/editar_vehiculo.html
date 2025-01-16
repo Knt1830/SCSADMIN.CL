@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full bg-white p-8 rounded-lg shadow">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">{{ titulo }}</h2>
+        </div>
+
+        {% if form.errors %}
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            Hay errores en el formulario. Por favor, revisa los campos.
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Modelo -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Modelo*</label>
+                    {{ form.modelo }}
+                    {% if form.modelo.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.modelo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Marca -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Marca*</label>
+                    {{ form.marca }}
+                    {% if form.marca.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.marca.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Patente -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Patente*</label>
+                    {{ form.patente }}
+                    {% if form.patente.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.patente.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Color -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Color*</label>
+                    {{ form.color }}
+                    {% if form.color.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.color.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Año -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Año*</label>
+                    {{ form.año }}
+                    {% if form.año.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.año.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Kilometraje Actual -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Kilometraje Inicial*</label>
+                    {{ form.kilometraje_actual }}
+                    {% if form.kilometraje_actual.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.kilometraje_actual.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8">
+                <a href="{% url 'transporte:lista_vehiculos' %}" 
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                    {% if vehiculo %}
+                        Actualizar Vehículo
+                    {% else %}
+                        Crear Vehículo
+                    {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Personalizar los campos de formulario para que coincidan con el estilo de Tailwind
+    const formInputs = document.querySelectorAll('input, select');
+    formInputs.forEach(input => {
+        input.classList.add(
+            'mt-1', 'block', 'w-full', 'rounded-md', 'border-gray-300', 
+            'shadow-sm', 'focus:border-blue-500', 'focus:ring-blue-500'
+        );
+    });
+});
+</script>
+{% endblock %}

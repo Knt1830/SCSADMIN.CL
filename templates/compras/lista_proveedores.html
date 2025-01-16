@@ -1,0 +1,137 @@
+<!-- templates/compras/lista_proveedores.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+        <!-- Header -->
+        <div class="px-4 py-5 sm:p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">Proveedores</h2>
+                    <p class="mt-1 text-sm text-gray-500">Gestione la información de sus proveedores</p>
+                </div>
+                <div class="flex space-x-3">
+                    <a href="{% url 'compras:home' %}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Volver
+                    </a>
+                    <a href="{% url 'compras:crear_proveedor' %}" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>
+                        Nuevo Proveedor
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="px-4 py-5 sm:p-6 border-b border-gray-200">
+            <form method="GET" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <label for="q" class="block text-sm font-medium text-gray-700">Buscar</label>
+                    <input type="text" name="q" id="q" value="{{ query }}"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           placeholder="Nombre o RUT">
+                </div>
+                <div>
+                    <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo de Proveedor</label>
+                    <select name="tipo" id="tipo"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Todos</option>
+                        {% for tipo in tipos_proveedor %}
+                            <option value="{{ tipo.id }}" {% if tipo.id|stringformat:"s" == tipo_seleccionado %}selected{% endif %}>
+                                {{ tipo.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="sm:col-span-2 flex items-end">
+                    <button type="submit"
+                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                        <i class="fas fa-search mr-2"></i>
+                        Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabla de proveedores -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Información
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Tipo
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Contacto
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Estado
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for proveedor in proveedores %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{ proveedor.nombre }}</div>
+                            <div class="text-sm text-gray-500">RUT: {{ proveedor.rut }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if proveedor.tipo_proveedor.es_materia_prima %}
+                                    bg-green-100 text-green-800 permanent
+                                {% else %}
+                                    bg-blue-100 text-blue-800
+                                {% endif %}">
+                                {{ proveedor.tipo_proveedor.nombre }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ proveedor.telefono }}</div>
+                            <div class="text-sm text-gray-500">{{ proveedor.direccion|truncatechars:30 }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if proveedor.activo %}
+                                    bg-green-100 text-green-800 permanent
+                                {% else %}
+                                    bg-red-100 text-red-800
+                                {% endif %}">
+                                {{ proveedor.activo|yesno:"Activo,Inactivo" }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{% url 'compras:detalle_proveedor' proveedor.id %}" 
+                               class="text-blue-600 hover:text-blue-900 mr-3">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'compras:editar_proveedor' proveedor.id %}" 
+                               class="text-green-600 hover:text-green-900">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                            No se encontraron proveedores
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

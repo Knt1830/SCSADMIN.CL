@@ -1,0 +1,471 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow rounded-lg mb-6 p-6">
+            <h2 class="text-2xl font-bold text-gray-900">Nueva Venta</h2>
+            <p class="mt-1 text-sm text-gray-600">Complete los detalles para registrar una nueva venta</p>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mt-4 p-4 {% if message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %} rounded-md">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form method="POST" class="space-y-6" id="ventaForm">
+            {% csrf_token %}
+            
+            <!-- Sección de Cliente -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Información del Cliente</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="cliente_existente" name="tipo_cliente" value="existente" 
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" checked>
+                            <label for="cliente_existente" class="ml-2 block text-sm text-gray-900">Cliente Existente</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="cliente_nuevo" name="tipo_cliente" value="nuevo" 
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                            <label for="cliente_nuevo" class="ml-2 block text-sm text-gray-900">Nuevo Cliente</label>
+                        </div>
+                    </div>
+
+                    <!-- Selector de Cliente Existente -->
+                    <div id="cliente_existente_form" class="transition-all duration-200">
+                        <select name="cliente" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Seleccione un cliente</option>
+                            {% for cliente in clientes %}
+                                <option value="{{ cliente.id }}">{{ cliente.nombre }} - {{ cliente.rut }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Formulario Nuevo Cliente -->
+                    <div id="cliente_nuevo_form" class="hidden transition-all duration-200">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nombre*</label>
+                                <input type="text" name="nombre_cliente" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">RUT*</label>
+                                <input type="text" name="rut_cliente" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Teléfono*</label>
+                                <input type="text" name="telefono_cliente" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Dirección</label>
+                                <input type="text" name="direccion_cliente" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Productos -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Productos</h3>
+                <div id="productos_container" class="space-y-4">
+                    <!-- Lista de productos seleccionados -->
+                </div>
+                
+                <!-- Selector de Productos -->
+                <div class="mt-4 p-4 bg-gray-50 rounded-md">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Producto</label>
+                            <select id="producto_selector" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Seleccionar producto</option>
+                                {% for producto in productos_venta %}
+                                    {% if producto.tipo_producto != 'ENVASE' %}
+                                        <option value="{{ producto.id }}" 
+                                                data-precio="{{ producto.precio_sugerido }}"
+                                                data-stock="{{ producto.stock_actual }}">
+                                            {{ producto.nombre }} (Stock: {{ producto.stock_actual }})
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Cantidad</label>
+                            <input type="number" id="cantidad_producto" min="0.01" step="0.01" 
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Precio Unitario</label>
+                            <input type="number" id="precio_producto" min="0.01" step="0.01" 
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <button type="button" id="agregar_producto" 
+                            class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                        Agregar Producto
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sección de Envases -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Envases</h3>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="incluir_envases" name="incluir_envases" 
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="incluir_envases" class="ml-2 block text-sm text-gray-900">
+                            Incluir Envases
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="envases_container" class="hidden space-y-4">
+                    <!-- Selector de Envases -->
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Envase</label>
+                            <select id="envase_selector" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="">Seleccionar envase</option>
+                                {% for producto in productos_venta %}
+                                    {% if producto.tipo_producto == 'ENVASE' %}
+                                        <option value="{{ producto.id }}"
+                                                data-stock="{{ producto.stock_actual }}"
+                                                data-precio="{{ producto.precio_sugerido|default:0 }}">
+                                            {{ producto.nombre }} (Stock: {{ producto.stock_actual }})
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Cantidad</label>
+                            <input type="number" id="cantidad_envase" min="1" step="1" 
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Precio Unitario</label>
+                            <input type="number" id="precio_envase" min="0" step="0.01" 
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                    </div>
+                        <div class="flex items-end">
+                            <button type="button" id="agregar_envase" 
+                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">
+                                Agregar Envase
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            
+
+            <!-- Sección de Pago -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Información de Pago</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="es_credito" name="es_credito" 
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="es_credito" class="ml-2 block text-sm text-gray-900">
+                            Venta a Crédito
+                        </label>
+                    </div>
+
+                    <div id="credito_container" class="hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Días de Crédito</label>
+                            <input type="number" 
+                                   name="dias_credito" 
+                                   min="1" 
+                                   value="30" 
+                                   required
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700">Observaciones</label>
+                        <textarea name="observaciones" rows="3" 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen y Totales -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Resumen de la Venta</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Subtotal:</span>
+                        <span class="text-gray-900" id="subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Total Envases:</span>
+                        <span class="text-gray-900" id="total_envases">$0.00</span>
+                    </div>
+                    <div class="border-t border-gray-200 pt-2 flex justify-between font-medium">
+                        <span class="text-gray-900">Total:</span>
+                        <span class="text-gray-900" id="total_venta">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="flex justify-end space-x-4">
+                <a href="{% url 'ventas:home' %}" 
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-md">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">
+                    Registrar Venta
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejo de tipo de cliente
+    const clienteExistenteRadio = document.getElementById('cliente_existente');
+    const clienteNuevoRadio = document.getElementById('cliente_nuevo');
+    const clienteExistenteForm = document.getElementById('cliente_existente_form');
+    const clienteNuevoForm = document.getElementById('cliente_nuevo_form');
+
+    function toggleClienteForm() {
+        if (clienteExistenteRadio.checked) {
+            clienteExistenteForm.classList.remove('hidden');
+            clienteNuevoForm.classList.add('hidden');
+        } else {
+            clienteExistenteForm.classList.add('hidden');
+            clienteNuevoForm.classList.remove('hidden');
+        }
+    }
+
+    clienteExistenteRadio.addEventListener('change', toggleClienteForm);
+    clienteNuevoRadio.addEventListener('change', toggleClienteForm);
+
+    // Manejo de envases
+    const incluirEnvases = document.getElementById('incluir_envases');
+    const envasesContainer = document.getElementById('envases_container');
+
+    incluirEnvases.addEventListener('change', function() {
+        envasesContainer.classList.toggle('hidden', !this.checked);
+    });
+
+    // Manejo de crédito
+    const esCreditoCheckbox = document.getElementById('es_credito');
+    const creditoContainer = document.getElementById('credito_container');
+
+    esCreditoCheckbox.addEventListener('change', function() {
+    creditoContainer.classList.toggle('hidden', !this.checked);
+    const diasCreditoInput = document.querySelector('input[name="dias_credito"]');
+    if (this.checked && !diasCreditoInput.value) {
+        diasCreditoInput.value = '30';
+    }
+    });
+
+    // Manejo de productos y cálculos
+    const productoSelector = document.getElementById('producto_selector');
+    const cantidadProducto = document.getElementById('cantidad_producto');
+    const precioProducto = document.getElementById('precio_producto');
+    const agregarProductoBtn = document.getElementById('agregar_producto');
+    const productosContainer = document.getElementById('productos_container');
+
+    // Arrays para almacenar productos y envases
+    let productosSeleccionados = [];
+    let envasesSeleccionados = [];
+
+    // Función para formatear precio
+    function formatearPrecio(precio) {
+        return new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: 'CLP'
+        }).format(precio);
+    }
+
+    // Función para actualizar totales
+    function actualizarTotales() {
+        let subtotal = productosSeleccionados.reduce((sum, item) => sum + (item.cantidad * item.precio), 0);
+        let totalEnvases = envasesSeleccionados.reduce((sum, item) => sum + (item.cantidad * item.precio), 0);
+        let total = subtotal + totalEnvases;
+
+        document.getElementById('subtotal').textContent = formatearPrecio(subtotal);
+        document.getElementById('total_envases').textContent = formatearPrecio(totalEnvases);
+        document.getElementById('total_venta').textContent = formatearPrecio(total);
+    }
+
+    // Función para crear elemento de producto
+    function crearElementoProducto(producto, esEnvase = false) {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-md';
+        div.innerHTML = `
+            <input type="hidden" name="${esEnvase ? 'envases' : 'productos'}[]" value="${JSON.stringify(producto)}">
+            <div class="flex-1">
+                <h4 class="font-medium">${producto.nombre}</h4>
+                <p class="text-sm text-gray-600">
+                    Cantidad: ${producto.cantidad} × ${formatearPrecio(producto.precio)}
+                </p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="font-medium">${formatearPrecio(producto.cantidad * producto.precio)}</span>
+                <button type="button" class="text-red-600 hover:text-red-800" onclick="eliminarProducto(this, ${esEnvase})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        return div;
+    }
+
+    // Función para agregar producto
+    agregarProductoBtn.addEventListener('click', function() {
+        const productoId = productoSelector.value;
+        const cantidad = parseFloat(cantidadProducto.value);
+        const precio = parseFloat(precioProducto.value);
+        
+        if (!productoId || !cantidad || !precio) {
+            alert('Por favor complete todos los campos del producto');
+            return;
+        }
+
+        const optionSeleccionada = productoSelector.options[productoSelector.selectedIndex];
+        const stockDisponible = parseFloat(optionSeleccionada.dataset.stock);
+
+        if (cantidad > stockDisponible) {
+            alert('La cantidad supera el stock disponible');
+            return;
+        }
+
+        const producto = {
+            id: productoId,
+            nombre: optionSeleccionada.text,
+            cantidad: cantidad,
+            precio: precio
+        };
+
+        productosSeleccionados.push(producto);
+        productosContainer.appendChild(crearElementoProducto(producto));
+        actualizarTotales();
+
+        // Limpiar campos
+        productoSelector.value = '';
+        cantidadProducto.value = '';
+        precioProducto.value = '';
+    });
+
+    // Manejo de envases
+    const envaseSelector = document.getElementById('envase_selector');
+    const cantidadEnvase = document.getElementById('cantidad_envase');
+    const agregarEnvaseBtn = document.getElementById('agregar_envase');
+
+    agregarEnvaseBtn.addEventListener('click', function() {
+    const envaseId = envaseSelector.value;
+    const cantidad = parseInt(cantidadEnvase.value);
+    const precio = parseFloat(document.getElementById('precio_envase').value);
+    
+    if (!envaseId || !cantidad || !precio) {
+        alert('Por favor complete todos los campos del envase');
+        return;
+    }
+
+    const optionSeleccionada = envaseSelector.options[envaseSelector.selectedIndex];
+    const stockDisponible = parseInt(optionSeleccionada.dataset.stock);
+
+    if (cantidad > stockDisponible) {
+        alert('La cantidad supera el stock disponible');
+        return;
+    }
+
+    const envase = {
+        id: envaseId,
+        nombre: optionSeleccionada.text,
+        cantidad: cantidad,
+        precio: precio
+    };
+
+    envasesSeleccionados.push(envase);
+    const container = document.getElementById('envases_container');
+    container.appendChild(crearElementoProducto(envase, true));
+    actualizarTotales();
+
+    // Limpiar campos
+    envaseSelector.value = '';
+    cantidadEnvase.value = '';
+    document.getElementById('precio_envase').value = '';
+});
+
+    // Función para eliminar producto o envase
+    window.eliminarProducto = function(button, esEnvase) {
+        const elemento = button.closest('div.flex.items-center.justify-between');
+        const index = Array.from(elemento.parentNode.children).indexOf(elemento);
+        
+        if (esEnvase) {
+            envasesSeleccionados.splice(index, 1);
+        } else {
+            productosSeleccionados.splice(index, 1);
+        }
+        
+        elemento.remove();
+        actualizarTotales();
+    };
+
+    // Event listener para auto-llenar precio sugerido
+    productoSelector.addEventListener('change', function() {
+        const option = productoSelector.options[productoSelector.selectedIndex];
+        if (option.value) {
+            precioProducto.value = option.dataset.precio || '';
+        }
+    });
+
+    envaseSelector.addEventListener('change', function() {
+    const option = envaseSelector.options[envaseSelector.selectedIndex];
+    if (option.value) {
+        document.getElementById('precio_envase').value = option.dataset.precio || '';
+    }
+    });
+
+    // Validación del formulario antes de enviar
+    document.getElementById('ventaForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validar cliente
+        const clienteExistente = document.getElementById('cliente_existente').checked;
+        if (clienteExistente && !document.querySelector('select[name="cliente"]').value) {
+            alert('Por favor seleccione un cliente');
+            return;
+        }
+
+        // Validar productos
+        if (productosSeleccionados.length === 0) {
+            alert('Debe agregar al menos un producto a la venta');
+            return;
+        }
+
+        // Crear campos ocultos para enviar los datos
+        const productosInput = document.createElement('input');
+        productosInput.type = 'hidden';
+        productosInput.name = 'productos_json';
+        productosInput.value = JSON.stringify(productosSeleccionados);
+        this.appendChild(productosInput);
+
+        const envasesInput = document.createElement('input');
+        envasesInput.type = 'hidden';
+        envasesInput.name = 'envases_json';
+        envasesInput.value = JSON.stringify(envasesSeleccionados);
+        this.appendChild(envasesInput);
+
+        // Enviar el formulario
+        this.submit();
+    });
+});
+</script>
+{% endblock %}

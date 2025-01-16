@@ -1,0 +1,38 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100">
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for modulo in modulos %}
+            <a href="{% if modulo.code == 'inventario' %}{% url 'inventario:home' %}{% elif modulo.code == 'transporte' %}{% url 'transporte:home' %}{% elif modulo.code == 'ventas' %}{% url 'ventas:home' %}{% elif modulo.code == 'compras' %}{% url 'compras:home' %}{% elif modulo.code == 'produccion' %}{% url 'produccion:home' %}{% elif modulo.code == 'rrhh' %}{% url 'rrhh:home' %}{% elif modulo.code == 'finanzas' %}{% url 'finanzas:home' %}{% else %}#{% endif %}" class="transform hover:scale-105 transition-transform duration-200">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas {% if modulo.code == 'compras' %}fa-shopping-cart
+                                           {% elif modulo.code == 'produccion' %}fa-industry
+                                           {% elif modulo.code == 'inventario' %}fa-warehouse
+                                           {% elif modulo.code == 'transporte' %}fa-truck
+                                           {% elif modulo.code == 'ventas' %}fa-cash-register
+                                           {% elif modulo.code == 'rrhh' %}fa-users
+                                           {% elif modulo.code == 'finanzas' %}fa-chart-line
+                                           {% endif %} text-3xl text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    {{ modulo.name }}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

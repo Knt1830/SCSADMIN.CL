@@ -1,0 +1,88 @@
+<!-- templates/inventario/ajuste_inventario.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+        <!-- Header -->
+        <div class="px-4 py-5 sm:p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">Ajuste de Inventario</h2>
+                    <p class="mt-1 text-sm text-gray-500">Registra entradas, salidas o ajustes de inventario</p>
+                </div>
+                <a href="{% url 'inventario:home' %}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="px-4 py-5 sm:p-6">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 p-4 {% if message.tags == 'success' %}bg-green-100 text-green-700 border-green-400{% else %}bg-red-100 text-red-700 border-red-400{% endif %} border rounded">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="{{ form.producto.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Producto
+                        </label>
+                        {{ form.producto }}
+                        {% if form.producto.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.producto.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.tipo_movimiento.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Tipo de Movimiento
+                        </label>
+                        {{ form.tipo_movimiento }}
+                        {% if form.tipo_movimiento.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.tipo_movimiento.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.cantidad.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Cantidad
+                        </label>
+                        {{ form.cantidad }}
+                        {% if form.cantidad.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.cantidad.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="{{ form.descripcion.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Descripción del Movimiento
+                    </label>
+                    {{ form.descripcion }}
+                    {% if form.descripcion.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.descripcion.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="flex justify-end pt-5">
+                    <button type="submit" 
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Registrar Movimiento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
