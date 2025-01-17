@@ -1,0 +1,200 @@
+<!-- templates/compras/detalle_orden.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header con información principal -->
+    <div class="bg-white shadow rounded-lg mb-6">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">Orden de Compra {{ orden.numero_orden }}</h2>
+                    <p class="mt-1 text-sm text-gray-500">Creada el {{ orden.fecha_creacion|date:"d/m/Y H:i" }}</p>
+                </div>
+                <div class="flex space-x-3">
+                    <a href="{% url 'compras:lista_ordenes' %}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Volver
+                    </a>
+                    {% if orden.estado == 'BORRADOR' %}
+                        <a href="{% url 'compras:editar_orden' orden.id %}" 
+                           class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                            <i class="fas fa-edit mr-2"></i>
+                            Editar
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Estado de la orden -->
+            <div class="mt-4 flex items-center">
+                <span class="text-sm font-medium text-gray-500 mr-2">Estado:</span>
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                    {% if orden.estado == 'BORRADOR' %}bg-gray-100 text-gray-800
+                    {% elif orden.estado == 'ENVIADA' %}bg-blue-100 text-blue-800
+                    {% elif orden.estado == 'CONFIRMADA' %}bg-yellow-100 text-yellow-800
+                    {% elif orden.estado == 'RECIBIDA' %}bg-green-100 text-green-800 permanent
+                    {% else %}bg-red-100 text-red-800{% endif %}">
+                    {{ orden.get_estado_display }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <!-- Información del Proveedor -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Información del Proveedor</h3>
+                <dl class="grid grid-cols-1 gap-x-4 gap-y-6">
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Nombre</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.proveedor.nombre }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">RUT</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.proveedor.rut }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Teléfono</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.proveedor.telefono }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Dirección</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.proveedor.direccion }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Información de la Orden -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Detalles de la Orden</h3>
+                <dl class="grid grid-cols-1 gap-x-4 gap-y-6">
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Fecha de Emisión</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.fecha_emision|date:"d/m/Y" }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Fecha de Entrega Esperada</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.fecha_entrega_esperada|date:"d/m/Y" }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Creado por</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.creado_por.get_full_name|default:orden.creado_por.username }}</dd>
+                    </div>
+                    {% if orden.notas %}
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Notas</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ orden.notas }}</dd>
+                    </div>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos -->
+    <div class="mt-6 bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Productos</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unit.</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for detalle in orden.detalles.all %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ detalle.producto.nombre }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                                {{ detalle.cantidad }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                                ${{ detalle.precio_unitario|floatformat:2 }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                                ${{ detalle.subtotal|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-gray-50">
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-sm font-medium text-gray-900 text-right">Subtotal:</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 text-right">${{ orden.subtotal|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-sm font-medium text-gray-900 text-right">IVA (19%):</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 text-right">${{ orden.impuestos|floatformat:2 }}</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td colspan="3" class="px-6 py-4 text-base font-medium text-gray-900 text-right">Total:</td>
+                            <td class="px-6 py-4 text-base font-medium text-gray-900 text-right">${{ orden.total|floatformat:2 }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones adicionales según el estado -->
+    <div class="mt-6 flex justify-end space-x-3">
+        {% if orden.estado == 'BORRADOR' %}
+            <form method="POST" action="{% url 'compras:actualizar_estado_orden' orden.id %}" class="inline">
+                {% csrf_token %}
+                <input type="hidden" name="estado" value="ENVIADA">
+                <button type="submit" 
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Enviar Orden
+                </button>
+            </form>
+        {% elif orden.estado == 'ENVIADA' %}
+            <form method="POST" action="{% url 'compras:actualizar_estado_orden' orden.id %}" class="inline">
+                {% csrf_token %}
+                <input type="hidden" name="estado" value="CONFIRMADA">
+                <button type="submit" 
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700">
+                    <i class="fas fa-check mr-2"></i>
+                    Confirmar Orden
+                </button>
+            </form>
+        {% elif orden.estado == 'CONFIRMADA' %}
+            <form method="POST" action="{% url 'compras:actualizar_estado_orden' orden.id %}" class="inline">
+                {% csrf_token %}
+                <input type="hidden" name="estado" value="RECIBIDA">
+                <button type="submit" 
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
+                        onclick="return confirm('¿Está seguro de recibir esta orden? Se actualizará el inventario automáticamente.')">
+                    <i class="fas fa-box mr-2"></i>
+                    Recibir Productos
+                </button>
+            </form>
+        {% endif %}
+
+        {% if orden.estado != 'RECIBIDA' and orden.estado != 'CANCELADA' %}
+            <form method="POST" action="{% url 'compras:actualizar_estado_orden' orden.id %}" class="inline">
+                {% csrf_token %}
+                <input type="hidden" name="estado" value="CANCELADA">
+                <button type="submit" 
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+                        onclick="return confirm('¿Está seguro de cancelar esta orden?')">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancelar Orden
+                </button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

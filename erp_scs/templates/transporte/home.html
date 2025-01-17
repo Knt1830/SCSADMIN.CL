@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100">
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">Módulo de Transporte</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Tarjeta de Vehículos -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-truck text-3xl text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Vehículos</h3>
+                                <p class="text-sm text-gray-500">
+                                    Total: {{ vehiculos_totales }} 
+                                    (Disponibles: {{ vehiculos_disponibles }})
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <a href="{% url 'transporte:lista_vehiculos' %}" 
+                               class="text-blue-600 hover:text-blue-800">
+                                Ver Listado
+                            </a>
+                            <a href="{% url 'transporte:crear_vehiculo' %}" 
+                               class="text-green-600 hover:text-green-800">
+                                Crear Nuevo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Choferes -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-users text-3xl text-green-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Choferes</h3>
+                                <p class="text-sm text-gray-500">
+                                    Total: {{ choferes_totales }} 
+                                    (Con Vehículo: {{ choferes_con_vehiculo }})
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <a href="{% url 'transporte:lista_choferes' %}" 
+                               class="text-blue-600 hover:text-blue-800">
+                                Ver Listado
+                            </a>
+                            <a href="{% url 'transporte:crear_chofer' %}" 
+                               class="text-green-600 hover:text-green-800">
+                                Crear Nuevo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Gastos -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-receipt text-3xl text-red-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Gastos</h3>
+                                <p class="text-sm text-gray-500">
+                                    Gestiona los gastos de los vehículos
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <a href="{% url 'transporte:lista_gastos_vehiculo' %}" 
+                               class="text-blue-600 hover:text-blue-800">
+                                Ver Listado
+                            </a>
+                            <a href="{% url 'transporte:registrar_gasto_vehiculo' %}" 
+                               class="text-green-600 hover:text-green-800">
+                                Registrar Gasto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

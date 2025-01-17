@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full bg-white p-8 rounded-lg shadow">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">{{ titulo }}</h2>
+        </div>
+
+        {% if form.errors %}
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            Hay errores en el formulario. Por favor, revisa los campos.
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Nombre -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre Completo*</label>
+                    {{ form.nombre }}
+                    {% if form.nombre.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.nombre.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- RUT -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">RUT*</label>
+                    {{ form.rut }}
+                    <p class="mt-1 text-xs text-gray-500">Formato: 12.345.678-9</p>
+                    {% if form.rut.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.rut.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Teléfono*</label>
+                    {{ form.telefono }}
+                    <p class="mt-1 text-xs text-gray-500">Formato: +56912345678</p>
+                    {% if form.telefono.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.telefono.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Vehículo Asignado -->
+                <div class="md:col-span-3">
+                    <label class="block text-sm font-medium text-gray-700">Vehículo Asignado</label>
+                    {{ form.vehiculo_asignado }}
+                    {% if form.vehiculo_asignado.errors %}
+                    <p class="mt-1 text-sm text-red-600">
+                        {% for error in form.vehiculo_asignado.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-8">
+                <a href="{% url 'transporte:lista_choferes' %}" 
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                    {% if chofer %}
+                        Actualizar Chofer
+                    {% else %}
+                        Crear Chofer
+                    {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Personalizar los campos de formulario para que coincidan con el estilo de Tailwind
+    const formInputs = document.querySelectorAll('input, select');
+    formInputs.forEach(input => {
+        input.classList.add(
+            'mt-1', 'block', 'w-full', 'rounded-md', 'border-gray-300', 
+            'shadow-sm', 'focus:border-blue-500', 'focus:ring-blue-500'
+        );
+    });
+});
+</script>
+{% endblock %}

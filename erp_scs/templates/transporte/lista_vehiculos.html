@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold text-gray-900">Listado de Vehículos</h1>
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'transporte:home' %}" 
+                           class="mr-2 text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-arrow-left mr-1"></i>Volver
+                        </a>
+                        <a href="{% url 'transporte:crear_vehiculo' %}" 
+                           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
+                            <i class="fas fa-plus mr-2"></i>Nuevo Vehículo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Filtros y Búsqueda -->
+                <form method="GET" class="mb-6">
+                    <div class="flex space-x-4">
+                        <input type="text" name="q" value="{{ query }}" placeholder="Buscar por modelo, marca o patente"
+                               class="flex-grow rounded-md border-gray-300 shadow-sm">
+                        
+                        <select name="estado" 
+                                class="rounded-md border-gray-300 shadow-sm">
+                            <option value="">Todos los Estados</option>
+                            <option value="disponible" {% if estado == 'disponible' %}selected{% endif %}>Disponible</option>
+                            <option value="en_uso" {% if estado == 'en_uso' %}selected{% endif %}>En Uso</option>
+                            <option value="mantenimiento" {% if estado == 'mantenimiento' %}selected{% endif %}>En Mantenimiento</option>
+                        </select>
+                        
+                        <button type="submit" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                            Buscar
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Tabla de Vehículos -->
+                <div class="overflow-x-auto">
+                    <table class="w-full whitespace-nowrap">
+                        <thead>
+                            <tr class="bg-gray-50 border-b">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patente</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Modelo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marca</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Año</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kilometraje</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gastos Totales</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for vehiculo in vehiculos %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">{{ vehiculo.patente }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">{{ vehiculo.modelo }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">{{ vehiculo.marca }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">{{ vehiculo.año }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                        {{ vehiculo.kilometraje_actual|floatformat:2 }} km
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {% if vehiculo.estado == 'disponible' %}bg-green-100 text-green-800 permanent
+                                        {% elif vehiculo.estado == 'en_uso' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ vehiculo.get_estado_display }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                        ${{ vehiculo.total_gastos|floatformat:2 }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end space-x-2">
+                                        <a href="{% url 'transporte:detalle_vehiculo' vehiculo.pk %}" 
+                                           class="text-blue-600 hover:text-blue-900">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'transporte:editar_vehiculo' vehiculo.pk %}" 
+                                           class="text-green-600 hover:text-green-900">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                                    No se encontraron vehículos.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

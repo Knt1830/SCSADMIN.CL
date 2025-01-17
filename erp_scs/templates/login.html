@@ -1,0 +1,36 @@
+<!-- templates/login.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <div class="text-center mb-8">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" class="mx-auto w-32">
+        </div>
+        
+        {% if error %}
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label class="block text-gray-700">Usuario</label>
+                <input type="text" name="username" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+            </div>
+            
+            <div>
+                <label class="block text-gray-700">Contraseña</label>
+                <input type="password" name="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700">
+                Ingresar
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

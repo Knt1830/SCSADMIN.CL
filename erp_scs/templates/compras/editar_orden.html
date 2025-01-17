@@ -1,0 +1,250 @@
+<!-- templates/compras/editar_orden.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+        <!-- Header -->
+        <div class="px-4 py-5 sm:p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">Editar Orden de Compra {{ orden.numero_orden }}</h2>
+                    <p class="mt-1 text-sm text-gray-500">Modifique la información de la orden</p>
+                </div>
+                <a href="{% url 'compras:detalle_orden' orden.id %}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <form method="POST" id="ordenForm" class="space-y-6">
+            {% csrf_token %}
+            <div class="px-4 py-5 sm:p-6">
+                <!-- Información básica -->
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <!-- Proveedor -->
+                    <div class="sm:col-span-2">
+                        <label for="{{ form.proveedor.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Proveedor *
+                        </label>
+                        {{ form.proveedor }}
+                        {% if form.proveedor.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.proveedor.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Fecha de emisión -->
+                    <div>
+                        <label for="{{ form.fecha_emision.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Fecha de Emisión *
+                        </label>
+                        {{ form.fecha_emision }}
+                        {% if form.fecha_emision.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.fecha_emision.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Fecha de entrega esperada -->
+                    <div>
+                        <label for="{{ form.fecha_entrega_esperada.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Fecha de Entrega Esperada *
+                        </label>
+                        {{ form.fecha_entrega_esperada }}
+                        {% if form.fecha_entrega_esperada.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.fecha_entrega_esperada.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Notas -->
+                    <div class="sm:col-span-2">
+                        <label for="{{ form.notas.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Notas
+                        </label>
+                        {{ form.notas }}
+                        {% if form.notas.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.notas.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Detalles de la orden -->
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Productos</h3>
+                    
+                    {{ detalles_formset.management_form }}
+                    
+                    <div id="detalles-container" class="space-y-4">
+                        {% for detalle_form in detalles_formset %}
+                            <div class="detalle-form border-b border-gray-200 pb-4">
+                                {% for hidden in detalle_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Producto *</label>
+                                        {{ detalle_form.producto }}
+                                        {% if detalle_form.producto.errors %}
+                                            <p class="mt-1 text-sm text-red-600">{{ detalle_form.producto.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Cantidad *</label>
+                                        {{ detalle_form.cantidad }}
+                                        {% if detalle_form.cantidad.errors %}
+                                            <p class="mt-1 text-sm text-red-600">{{ detalle_form.cantidad.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Precio Unitario *</label>
+                                        {{ detalle_form.precio_unitario }}
+                                        {% if detalle_form.precio_unitario.errors %}
+                                            <p class="mt-1 text-sm text-red-600">{{ detalle_form.precio_unitario.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="flex items-end">
+                                        {% if forloop.counter > 1 %}
+                                            <button type="button" 
+                                                    class="text-red-600 hover:text-red-900"
+                                                    onclick="eliminarDetalle(this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <label class="block text-sm font-medium text-gray-700">Notas</label>
+                                    {{ detalle_form.notas }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="button" 
+                            onclick="agregarDetalle()"
+                            class="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-plus mr-2"></i>
+                        Agregar Producto
+                    </button>
+                </div>
+
+                <!-- Totales -->
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <div class="flex justify-end">
+                        <dl class="space-y-2">
+                            <div class="flex justify-between">
+                                <dt class="text-sm font-medium text-gray-500">Subtotal:</dt>
+                                <dd class="text-sm text-gray-900" id="subtotal">$0.00</dd>
+                            </div>
+                            <div class="flex justify-between">
+                                <dt class="text-sm font-medium text-gray-500">IVA (19%):</dt>
+                                <dd class="text-sm text-gray-900" id="iva">$0.00</dd>
+                            </div>
+                            <div class="flex justify-between border-t border-gray-200 pt-2">
+                                <dt class="text-base font-medium text-gray-900">Total:</dt>
+                                <dd class="text-base font-medium text-gray-900" id="total">$0.00</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="flex justify-end pt-5">
+                    <button type="submit" 
+                            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Actualizar Orden
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script para manejar el formset dinámicamente -->
+<script>
+    const formsetPrefix = 'detalles';
+    let detalleCounter = document.querySelectorAll('.detalle-form').length;
+    const management_form = document.getElementById('id_detalles-TOTAL_FORMS');
+
+    function agregarDetalle() {
+        const container = document.getElementById('detalles-container');
+        const template = container.querySelector('.detalle-form').cloneNode(true);
+        
+        // Limpiar valores y actualizar índices
+        template.querySelectorAll('input, select, textarea').forEach(input => {
+            const name = input.getAttribute('name');
+            if (name) {
+                const newName = name.replace(/-\d+-/, `-${detalleCounter}-`);
+                input.setAttribute('name', newName);
+                input.setAttribute('id', `id_${newName}`);
+                if (input.type !== 'hidden') {
+                    input.value = '';
+                }
+            }
+        });
+        
+        container.appendChild(template);
+        detalleCounter++;
+        management_form.value = detalleCounter;
+        
+        // Reinicializar eventos
+        inicializarCalculos();
+    }
+
+    function eliminarDetalle(button) {
+        const detalleForm = button.closest('.detalle-form');
+        if (document.querySelectorAll('.detalle-form').length > 1) {
+            detalleForm.remove();
+            calcularTotales();
+            
+            // Actualizar contadores
+            detalleCounter--;
+            management_form.value = detalleCounter;
+        }
+    }
+
+    function inicializarCalculos() {
+        document.querySelectorAll('.detalle-form').forEach(detalle => {
+            const cantidad = detalle.querySelector('[name$="-cantidad"]');
+            const precio = detalle.querySelector('[name$="-precio_unitario"]');
+            
+            [cantidad, precio].forEach(input => {
+                if (input) {
+                    input.addEventListener('input', calcularTotales);
+                }
+            });
+        });
+    }
+
+    function calcularTotales() {
+        let subtotal = 0;
+        
+        document.querySelectorAll('.detalle-form').forEach(detalle => {
+            const cantidad = parseFloat(detalle.querySelector('[name$="-cantidad"]').value) || 0;
+            const precio = parseFloat(detalle.querySelector('[name$="-precio_unitario"]').value) || 0;
+            subtotal += cantidad * precio;
+        });
+        
+        const iva = subtotal * 0.19;
+        const total = subtotal + iva;
+        
+        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('iva').textContent = `$${iva.toFixed(2)}`;
+        document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Inicializar al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        inicializarCalculos();
+        calcularTotales();
+    });
+</script>
+{% endblock %}

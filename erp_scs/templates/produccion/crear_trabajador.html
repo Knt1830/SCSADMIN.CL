@@ -1,0 +1,144 @@
+<!-- templates/produccion/crear_trabajador.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+        <!-- Header -->
+        <div class="px-4 py-5 sm:p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">
+                        {% if form.instance.pk %}
+                            Editar Trabajador
+                        {% else %}
+                            Nuevo Trabajador
+                        {% endif %}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500">Complete la información del trabajador</p>
+                </div>
+                <a href="{% url 'produccion:lista_trabajadores' %}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Mensajes de error/éxito -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="px-4 py-3 mt-4 {% if message.tags == 'success' %}bg-green-100 border-green-400 text-green-700{% else %}bg-red-100 border-red-400 text-red-700{% endif %} rounded relative mx-4" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Formulario -->
+        <div class="px-4 py-5 sm:p-6">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Nombre -->
+                <div>
+                    <label for="{{ form.nombre.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Nombre Completo *
+                    </label>
+                    {{ form.nombre }}
+                    {% if form.nombre.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.nombre.errors.0 }}</p>
+                    {% else %}
+                        <p class="mt-2 text-xs text-gray-500">Ingrese nombre y apellidos del trabajador</p>
+                    {% endif %}
+                </div>
+
+                <!-- RUT -->
+                <div>
+                    <label for="{{ form.rut.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        RUT *
+                    </label>
+                    {{ form.rut }}
+                    {% if form.rut.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.rut.errors.0 }}</p>
+                    {% else %}
+                        <p class="mt-2 text-xs text-gray-500">Formato: XX.XXX.XXX-X</p>
+                    {% endif %}
+                </div>
+
+                <!-- Estado (solo en edición) -->
+                {% if form.instance.pk %}
+                    <div>
+                        <div class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                {{ form.activo }}
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ form.activo.id_for_label }}" class="font-medium text-gray-700">Activo</label>
+                                <p class="text-gray-500">El trabajador está disponible para asignaciones</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Botones de acción -->
+                <div class="flex justify-end space-x-3 pt-5">
+                    {% if form.instance.pk %}
+                        <button type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Actualizar Trabajador
+                        </button>
+                    {% else %}
+                        <button type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Crear Trabajador
+                        </button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script para formateo de RUT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rutInput = document.getElementById('{{ form.rut.id_for_label }}');
+            
+            rutInput.addEventListener('input', function(e) {
+                let value = e.target.value;
+                
+                // Si está borrando, permitir la acción
+                if (value.length < this.oldValue?.length) {
+                    this.oldValue = value;
+                    return;
+                }
+
+                // Limpiar el valor de todo excepto números y K
+                value = value.replace(/[^\dkK]/g, '')
+                
+                // Aplicar el formato solo si hay contenido
+                if (value.length > 0) {
+                    // Separar el dígito verificador
+                    let cuerpo = value.slice(0, -1);
+                    let dv = value.slice(-1).toUpperCase();
+                    
+                    // Agregar puntos y guión
+                    if (cuerpo.length > 3) {
+                        cuerpo = cuerpo.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    }
+                    
+                    // Unir todo
+                    value = cuerpo + '-' + dv;
+                }
+                
+                // Actualizar el valor
+                e.target.value = value;
+                this.oldValue = value;
+            });
+
+            // Guardar el valor inicial
+            rutInput.oldValue = rutInput.value;
+        });
+    </script>
+</div>
+{% endblock %}

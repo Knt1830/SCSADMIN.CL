@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Reporte de Productividad</h1>
+        </div>
+
+        <!-- Filtros -->
+        <div class="bg-white shadow rounded-lg mb-6 p-4">
+            <form method="get" class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <!-- Trabajador -->
+                <div>
+                    <label for="trabajador" class="block text-sm font-medium text-gray-700">Trabajador</label>
+                    <select name="trabajador" id="trabajador" 
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md">
+                        <option value="">Todos los trabajadores</option>
+                        {% for trabajador in trabajadores %}
+                            <option value="{{ trabajador.usuario.id }}" 
+                                    {% if trabajador.usuario.id|stringformat:'s' == trabajador_actual %}selected{% endif %}>
+                                {{ trabajador.usuario.get_full_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Fecha Inicio -->
+                <div>
+                    <label for="fecha_inicio" class="block text-sm font-medium text-gray-700">Fecha Inicio</label>
+                    <input type="date" name="fecha_inicio" id="fecha_inicio" 
+                           value="{{ fecha_inicio }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md">
+                </div>
+
+                <!-- Fecha Fin -->
+                <div>
+                    <label for="fecha_fin" class="block text-sm font-medium text-gray-700">Fecha Fin</label>
+                    <input type="date" name="fecha_fin" id="fecha_fin" 
+                           value="{{ fecha_fin }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md">
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="sm:col-span-3 flex justify-end space-x-2">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        Aplicar Filtros
+                    </button>
+                    <a href="{% url 'rrhh:produccion_list' %}" 
+                       class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                        Limpiar Filtros
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Resumen de Métricas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <!-- Total Unidades -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Total Unidades</h3>
+                <p class="text-2xl font-bold text-blue-600">
+                    {{ total_unidades|default:0|floatformat:2 }}
+                </p>
+            </div>
+
+            <!-- Total Pago -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Total Pago</h3>
+                <p class="text-2xl font-bold text-green-600">
+                    ${{ total_pago|default:0|floatformat:2 }}
+                </p>
+            </div>
+
+            <!-- Rendimiento Diario -->
+            <div class="bg-white shadow rounded-lg p-4">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Rendimiento Diario Promedio</h3>
+                <p class="text-sm text-gray-600">
+                    Unidades: {{ rendimiento_diario_promedio.unidades_promedio|floatformat:2 }}<br>
+                    Pago: ${{ rendimiento_diario_promedio.pago_promedio|floatformat:2 }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Métricas por Producto -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Métricas por Producto
+                </h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Unidades</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in metricas_producto %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ producto.producto__nombre }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">{{ producto.total_unidades|floatformat:2 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">${{ producto.total_pago|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Métricas por Trabajador -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Métricas por Trabajador
+                </h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trabajador</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Unidades</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trabajador in metricas_trabajador %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ trabajador.produccion__trabajador__first_name }} {{ trabajador.produccion__trabajador__last_name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">{{ trabajador.total_unidades|floatformat:2 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">${{ trabajador.total_pago|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Listado de Producciones -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Detalle de Producciones
+                </h3>
+            </div>
+            {% if producciones %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trabajador</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for produccion in producciones %}
+                            {% for item in produccion.items.all %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ produccion.fecha|date:"d/m/Y" }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ produccion.trabajador.get_full_name }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ item.producto.nombre }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
+                                    {{ item.cantidad_producida|floatformat:2 }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
+                                    ${{ item.total_pago|floatformat:2 }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <p class="text-gray-500">No hay registros de producción para mostrar</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const trabajadorSelect = document.getElementById('trabajador');
+    const fechaInicioInput = document.getElementById('fecha_inicio');
+    const fechaFinInput = document.getElementById('fecha_fin');
+
+    // Opcional: Validación de fechas
+    fechaFinInput.addEventListener('change', function() {
+        if (fechaInicioInput.value && this.value && this.value < fechaInicioInput.value) {
+            alert('La fecha de fin no puede ser anterior a la fecha de inicio');
+            this.value = '';
+        }
+    });
+});
+</script>
+{% endblock %}

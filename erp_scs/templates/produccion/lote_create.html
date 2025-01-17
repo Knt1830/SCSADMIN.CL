@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        {% if object %}
+                            Editar Lote {{ object.codigo }}
+                        {% else %}
+                            Crear Nuevo Lote
+                        {% endif %}
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        {% if object %}
+                            Modificar información del lote
+                        {% else %}
+                            Iniciar un nuevo lote de producción
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <a href="{% if object %}{% url 'produccion:lote_detail' object.pk %}{% else %}{% url 'produccion:lote_list' %}{% endif %}" 
+                       class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                        <i class="fas fa-arrow-left mr-2"></i>Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="bg-white shadow rounded-lg">
+            <form method="post" class="space-y-6 p-6">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-circle text-red-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-700">
+                                Por favor corrige los errores señalados.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Orden de Compra -->
+                <div>
+                    <label for="id_orden_compra" class="block text-sm font-medium text-gray-700">
+                        Orden de Compra
+                    </label>
+                    <div class="mt-1">
+                        {% if object %}
+                            <div class="text-gray-700 py-2">
+                                {{ object.orden_compra.codigo }} - {{ object.orden_compra.proveedor.nombre }}
+                                <input type="hidden" name="orden_compra" value="{{ object.orden_compra.id }}">
+                            </div>
+                        {% else %}
+                            <select name="orden_compra" id="id_orden_compra" 
+                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Seleccione una orden de compra</option>
+                                {% for orden in ordenes_compra %}
+                                    <option value="{{ orden.id }}" 
+                                            data-codigo="{{ orden.numero_orden }}"
+                                            data-proveedor="{{ orden.proveedor.nombre }}"
+                                            {% if form.orden_compra.value|stringformat:"s" == orden.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ orden.numero_orden }} - {{ orden.proveedor.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                        {% if form.orden_compra.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.orden_compra.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Código de Lote -->
+                <div>
+                    <label for="id_codigo" class="block text-sm font-medium text-gray-700">
+                        Código de Lote
+                    </label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        {% if object %}
+                            <div class="text-gray-700 py-2">
+                                {{ object.codigo }}
+                                <input type="hidden" name="codigo" value="{{ object.codigo }}">
+                            </div>
+                        {% else %}
+                            <input type="text" name="codigo" id="id_codigo"
+                                   class="block w-full pr-10 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-md"
+                                   placeholder="LOT-2024-001" 
+                                   {% if form.codigo.value %}value="{{ form.codigo.value }}"{% endif %}>
+                        {% endif %}
+                        {% if form.codigo.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.codigo.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Estado -->
+                <div>
+                    <label for="id_estado" class="block text-sm font-medium text-gray-700">
+                        Estado
+                    </label>
+                    <div class="mt-1">
+                        <select name="estado" id="id_estado"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                            {% for value, label in form.fields.estado.choices %}
+                                <option value="{{ value }}" 
+                                        {% if object and object.estado == value %}selected
+                                        {% elif not object and form.estado.value == value %}selected
+                                        {% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Observaciones -->
+                <div>
+                    <label for="id_observaciones" class="block text-sm font-medium text-gray-700">
+                        Observaciones
+                    </label>
+                    <div class="mt-1">
+                        <textarea id="id_observaciones" name="observaciones" rows="3"
+                                  class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                  placeholder="Observaciones adicionales sobre el lote">{% if object %}{{ object.observaciones }}{% else %}{{ form.observaciones.value|default:'' }}{% endif %}</textarea>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex justify-end space-x-3 pt-4 border-t">
+                    <a href="{% if object %}{% url 'produccion:lote_detail' object.pk %}{% else %}{% url 'produccion:lote_list' %}{% endif %}" 
+                       class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Cancelar
+                    </a>
+                    <button type="submit"
+                            class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        {% if object %}
+                            Guardar Cambios
+                        {% else %}
+                            Crear Lote
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if not object %}
+<!-- Script para autocompletar código solo en modo creación -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ordenSelect = document.getElementById('id_orden_compra');
+    const codigoInput = document.getElementById('id_codigo');
+    
+    ordenSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.value) {
+            const ordenCodigo = selectedOption.dataset.codigo;
+            const fecha = new Date();
+            const año = fecha.getFullYear();
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            codigoInput.value = `LOT-${ordenCodigo}-${año}${mes}`;
+        }
+    });
+});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="md:flex md:items-center md:justify-between mb-8">
+            <div class="flex-1 min-w-0">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    {% if object %}
+                        Editar Tarifa
+                    {% else %}
+                        Nueva Tarifa
+                    {% endif %}
+                </h1>
+                <p class="mt-1 text-sm text-gray-500">
+                    Trabajador: {{ trabajador.usuario.get_full_name }} ({{ trabajador.rut }})
+                </p>
+            </div>
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <a href="{% url 'rrhh:trabajador_detail' trabajador.pk %}" 
+                   class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">
+                    <i class="fas fa-arrow-left mr-2"></i>Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="bg-white shadow rounded-lg">
+            <form method="post" class="space-y-6 p-6">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="rounded-md bg-red-50 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-circle text-red-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">
+                                Se encontraron errores en el formulario
+                            </h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ field }}: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Información de la Tarifa -->
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                    <!-- Producto -->
+                    <div class="sm:col-span-2">
+                        <label for="{{ form.producto.id_for_label }}" class="block text-sm font-medium text-gray-700 required">
+                            Producto
+                        </label>
+                        {{ form.producto }}
+                        {% if form.producto.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.producto.errors.0 }}</p>
+                        {% endif %}
+                        <p class="mt-2 text-sm text-gray-500">Seleccione el producto para el cual se establecerá la tarifa</p>
+                    </div>
+
+                    <!-- Precio por Unidad -->
+                    <div class="sm:col-span-2">
+                        <label for="{{ form.precio_unidad.id_for_label }}" class="block text-sm font-medium text-gray-700 required">
+                            Precio por Unidad
+                        </label>
+                        {{ form.precio_unidad }}
+                        {% if form.precio_unidad.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.precio_unidad.errors.0 }}</p>
+                        {% endif %}
+                        <p class="mt-2 text-sm text-gray-500">Precio a pagar por cada unidad producida</p>
+                    </div>
+
+                    <!-- Fechas -->
+                    <div>
+                        <label for="{{ form.fecha_inicio.id_for_label }}" class="block text-sm font-medium text-gray-700 required">
+                            Fecha de Inicio
+                        </label>
+                        {{ form.fecha_inicio }}
+                        {% if form.fecha_inicio.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.fecha_inicio.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.fecha_termino.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Fecha de Término
+                        </label>
+                        {{ form.fecha_termino }}
+                        {% if form.fecha_termino.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.fecha_termino.errors.0 }}</p>
+                        {% endif %}
+                        <p class="mt-2 text-sm text-gray-500">Opcional. Dejar en blanco si no tiene fecha de término</p>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="sm:col-span-2">
+                        <div class="flex items-center">
+                            {{ form.activa }}
+                            <label for="{{ form.activa.id_for_label }}" class="ml-2 block text-sm text-gray-900">
+                                Tarifa Activa
+                            </label>
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Al marcar como activa, se desactivarán automáticamente otras tarifas para el mismo producto
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="mt-6 flex justify-end space-x-3">
+                    <a href="{% url 'rrhh:trabajador_detail' trabajador.pk %}" 
+                       class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Cancelar
+                    </a>
+                    <button type="submit"
+                            class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700">
+                        {% if object %}
+                            Guardar Cambios
+                        {% else %}
+                            Crear Tarifa
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar los widgets de fecha si es necesario
+    const fechaInicioInput = document.getElementById('{{ form.fecha_inicio.id_for_label }}');
+    const fechaTerminoInput = document.getElementById('{{ form.fecha_termino.id_for_label }}');
+
+    // Validación: fecha de término no puede ser anterior a fecha de inicio
+    fechaTerminoInput.addEventListener('change', function() {
+        if (fechaInicioInput.value && fechaTerminoInput.value && 
+            fechaTerminoInput.value < fechaInicioInput.value) {
+            alert('La fecha de término no puede ser anterior a la fecha de inicio');
+            fechaTerminoInput.value = '';
+        }
+    });
+});
+</script>
+{% endblock %}
+

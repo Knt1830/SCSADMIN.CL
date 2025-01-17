@@ -1,0 +1,207 @@
+<!-- templates/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Frutas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 4rem; /* Espacio para el footer */
+        }
+        .main-content {
+            flex: 1;
+            margin-bottom: 5rem; /* Margen adicional para asegurar que el contenido no se oculte */
+        }
+        .topnav {
+            font-size: 1.2rem;
+            padding: 1rem 0;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    {% if user.is_authenticated %}
+    <!-- Header -->
+    <nav class="bg-white shadow fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="{% url 'dashboard' %}" class="home-link" data-form-check="true">
+                            <img src="{% static 'img/logo.png' %}" alt="Logo" class="h-8 w-auto">
+                        </a>
+                    </div>
+                </div>
+                <div class="topnav">
+                        {% for modulo in modulos %}
+                            <a class="nav-link" href="{% if modulo.code == 'inventario' %}{% url 'inventario:home' %}{% elif modulo.code == 'transporte' %}{% url 'transporte:home' %}{% elif modulo.code == 'ventas' %}{% url 'ventas:home' %}{% elif modulo.code == 'compras' %}{% url 'compras:home' %}{% elif modulo.code == 'produccion' %}{% url 'produccion:home' %}{% elif modulo.code == 'rrhh' %}{% url 'rrhh:home' %}{% elif modulo.code == 'finanzas' %}{% url 'finanzas:home' %}{% else %}#{% endif %}">
+                                {{ modulo.name }}   
+                                <!--i class="fas {% if modulo.code == 'compras' %}fa-shopping-cart
+                                           {% elif modulo.code == 'produccion' %}fa-industry
+                                           {% elif modulo.code == 'inventario' %}fa-warehouse
+                                           {% elif modulo.code == 'transporte' %}fa-truck
+                                           {% elif modulo.code == 'ventas' %}fa-cash-register
+                                           {% elif modulo.code == 'rrhh' %}fa-users
+                                           {% elif modulo.code == 'finanzas' %}fa-chart-line
+                                           {% endif %} text-3xl text-blue-600">
+                                </i-->
+                            </a>
+                        {% endfor %}           
+                </div>   
+                <div class="flex items-center">
+                    <div class="relative">
+                        <button id="userMenu" class="p-2 rounded-full hover:bg-gray-100">
+                            <i class="fas fa-cog text-gray-600"></i>
+                        </button>
+                        
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                            <div class="py-1">
+                                <a href="{% url 'perfil' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user mr-2"></i>Perfil
+                                </a>
+                                {% if user.es_admin or user.is_superuser %}
+                                <a href="{% url 'crear_usuario' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user-plus mr-2"></i>Crear Usuario
+                                </a>
+                                {% endif %}
+                                <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <!-- Contenido principal con padding-top cuando el usuario está autenticado -->
+
+    <div class="{% if user.is_authenticated %}pt-16{% endif %}">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    
+    <footer class="footer">
+        <p class="text-center text-gray-600">Desarrollado por TENSTUDIOS</p>
+    </footer>
+
+    <!-- Modal de confirmación -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">¿Estás seguro?</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500">
+                        Hay cambios sin guardar. Si continúas, perderás todos los cambios realizados.
+                    </p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="confirmYes" class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+                        Sí, continuar
+                    </button>
+                    <button id="confirmNo" class="ml-3 px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Manejo del menú de usuario
+        const userMenu = document.getElementById('userMenu');
+        const userDropdown = document.getElementById('userDropdown');
+        const confirmModal = document.getElementById('confirmModal');
+        let targetHref = '';
+
+        if (userMenu && userDropdown) {
+            userMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!userMenu.contains(e.target) && !userDropdown.contains(e.target)) {
+                    userDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        // Manejo de formularios y navegación
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a[data-form-check="true"]');
+            if (link) {
+                const forms = document.querySelectorAll('form');
+                let hasChanges = false;
+
+                forms.forEach(form => {
+                    const formElements = form.querySelectorAll('input, textarea, select');
+                    formElements.forEach(element => {
+                        if (element.type === 'checkbox' || element.type === 'radio') {
+                            if (element.checked !== element.defaultChecked) hasChanges = true;
+                        } else if (element.value !== element.defaultValue) {
+                            hasChanges = true;
+                        }
+                    });
+                });
+
+                if (hasChanges) {
+                    e.preventDefault();
+                    targetHref = link.href;
+                    confirmModal.classList.remove('hidden');
+                }
+            }
+        });
+
+        // Manejo del modal de confirmación
+        if (confirmModal) {
+            document.getElementById('confirmYes').addEventListener('click', function() {
+                confirmModal.classList.add('hidden');
+                if (targetHref) window.location.href = targetHref;
+            });
+
+            document.getElementById('confirmNo').addEventListener('click', function() {
+                confirmModal.classList.add('hidden');
+            });
+        }
+    });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener todos los mensajes
+        const messages = document.querySelectorAll('[class*="bg-green-100"], [class*="bg-red-100"]');
+        
+        // Para cada mensaje, configurar un temporizador para removerlo
+        messages.forEach(function(message) {
+        if (!message.classList.contains('permanent')) {  // Skip messages with 'permanent' class
+            setTimeout(function() {
+                message.style.transition = 'opacity 0.5s ease';
+                message.style.opacity = '0';
+                setTimeout(function() {
+                    message.remove();
+                }, 500);
+            }, 3000);
+        }
+    });
+    });
+
+    </script>
+</body>
+</html>

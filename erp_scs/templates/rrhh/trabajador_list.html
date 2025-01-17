@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Trabajadores</h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Gestión de personal de planta y temporeros
+                    </p>
+                </div>
+                <div>
+                    <a href="{% url 'rrhh:trabajador_form' %}" 
+                       class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>Nuevo Trabajador
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y Búsqueda -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="p-4">
+                <form method="get" class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                    <!-- Búsqueda -->
+                    <div class="sm:col-span-2">
+                        <label for="search" class="block text-sm font-medium text-gray-700">Buscar</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" 
+                                   name="search" 
+                                   id="search"
+                                   value="{{ search }}"
+                                   class="pl-10 block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                   placeholder="Buscar por nombre o RUT">
+                        </div>
+                    </div>
+
+                    <!-- Filtro Tipo -->
+                    <div>
+                        <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                        <select name="tipo" 
+                                id="tipo"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                            <option value="">Todos</option>
+                            {% for value, label in tipos %}
+                            <option value="{{ value }}" {% if tipo_actual == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Filtro Estado -->
+                    <div>
+                        <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
+                        <select name="estado" 
+                                id="estado"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                            <option value="">Todos</option>
+                            <option value="activo" {% if estado_actual == 'activo' %}selected{% endif %}>Activos</option>
+                            <option value="inactivo" {% if estado_actual == 'inactivo' %}selected{% endif %}>Inactivos</option>
+                        </select>
+                    </div>
+
+                    <!-- Botones de Filtrado -->
+                    <div class="sm:col-span-4 flex justify-end space-x-2">
+                        <a href="{% url 'rrhh:trabajador_list' %}" 
+                           class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+                            Limpiar Filtros
+                        </a>
+                        <button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                            Aplicar Filtros
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla de Trabajadores -->
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            {% if trabajadores %}
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Trabajador
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            RUT
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Tipo
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Estado
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Fecha Ingreso
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for trabajador in trabajadores %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    {% if trabajador.tipo == 'PLANTA' %}
+                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-blue-100">
+                                        <i class="fas fa-user-tie text-blue-600"></i>
+                                    </span>
+                                    {% else %}
+                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-green-100 permanent">
+                                        <i class="fas fa-user text-green-600 permanent"></i>
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ trabajador.usuario.get_full_name }}
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        {{ trabajador.usuario.email }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ trabajador.rut }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                       {% if trabajador.tipo == 'PLANTA' %}
+                                       bg-blue-100 text-blue-800
+                                       {% else %}
+                                       bg-green-100 text-green-800 permanent
+                                       {% endif %}">
+                                {{ trabajador.get_tipo_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                       {% if trabajador.estado %}
+                                       bg-green-100 text-green-800 permanent
+                                       {% else %}
+                                       bg-red-100 text-red-800
+                                       {% endif %}">
+                                {{ trabajador.estado|yesno:"Activo,Inactivo" }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ trabajador.fecha_ingreso|date:"d/m/Y" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <a href="{% url 'rrhh:trabajador_detail' trabajador.pk %}" 
+                                   class="text-blue-600 hover:text-blue-900"
+                                   title="Ver detalles">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'rrhh:trabajador_update' trabajador.pk %}" 
+                                   class="text-yellow-600 hover:text-yellow-900"
+                                   title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% if trabajador.tipo == 'PLANTA' %}
+                                <a href="{% url 'rrhh:contrato_create' trabajador.pk %}" 
+                                   class="text-green-600 hover:text-green-900"
+                                   title="Nuevo contrato">
+                                    <i class="fas fa-file-contract"></i>
+                                </a>
+                                {% else %}
+                                <a href="{% url 'rrhh:tarifa_create' trabajador.pk %}" 
+                                   class="text-purple-600 hover:text-purple-900"
+                                   title="Nueva tarifa">
+                                    <i class="fas fa-tags"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <!-- Paginación -->
+            {% if is_paginated %}
+            <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div class="flex-1 flex justify-between sm:hidden">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_actual %}&tipo={{ tipo_actual }}{% endif %}{% if estado_actual %}&estado={{ estado_actual }}{% endif %}"
+                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Anterior
+                    </a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_actual %}&tipo={{ tipo_actual }}{% endif %}{% if estado_actual %}&estado={{ estado_actual }}{% endif %}"
+                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Siguiente
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-gray-700">
+                            Mostrando 
+                            <span class="font-medium">{{ page_obj.start_index }}</span>
+                            a
+                            <span class="font-medium">{{ page_obj.end_index }}</span>
+                            de
+                            <span class="font-medium">{{ paginator.count }}</span>
+                            resultados
+                        </p>
+                    </div>
+                    <div>
+                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                            {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_actual %}&tipo={{ tipo_actual }}{% endif %}{% if estado_actual %}&estado={{ estado_actual }}{% endif %}"
+                               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Anterior</span>
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            {% endif %}
+                            
+                            {% for num in paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600">
+                                {{ num }}
+                            </span>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}{% if tipo_actual %}&tipo={{ tipo_actual }}{% endif %}{% if estado_actual %}&estado={{ estado_actual }}{% endif %}"
+                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                {{ num }}
+                            </a>
+                            {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if tipo_actual %}&tipo={{ tipo_actual }}{% endif %}{% if estado_actual %}&estado={{ estado_actual }}{% endif %}"
+                               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Siguiente</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            {% endif %}
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <!-- Estado vacío -->
+            <div class="text-center py-12">
+                <i class="fas fa-users text-gray-400 text-5xl mb-4"></i>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No se encontraron trabajadores</h3>
+                {% if search or tipo_actual or estado_actual %}
+                <p class="text-gray-500">No hay resultados para los filtros aplicados.</p>
+                <a href="{% url 'rrhh:trabajador_list' %}" 
+                   class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200">
+                    <i class="fas fa-times mr-2"></i>
+                    Limpiar filtros
+                </a>
+                {% else %}
+                <p class="text-gray-500">Aún no hay trabajadores registrados en el sistema.</p>
+                <a href="{% url 'rrhh:trabajador_form' %}" 
+                   class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                    <i class="fas fa-plus mr-2"></i>
+                    Agregar primer trabajador
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Función para aplicar filtros automáticamente al cambiar los selects
+document.addEventListener('DOMContentLoaded', function() {
+    const filterForm = document.querySelector('form');
+    const tipoSelect = document.getElementById('tipo');
+    const estadoSelect = document.getElementById('estado');
+
+    // Aplicar filtros automáticamente al cambiar los selects
+    tipoSelect.addEventListener('change', () => filterForm.submit());
+    estadoSelect.addEventListener('change', () => filterForm.submit());
+});
+</script>
+
+{% endblock %}

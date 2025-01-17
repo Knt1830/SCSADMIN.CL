@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full">
+        <div class="bg-white shadow rounded-lg">
+            <div class="p-8 max-w-4xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900">
+                        {% if venta %}
+                            Editar Venta
+                        {% else %}
+                            Registrar Nueva Venta
+                        {% endif %}
+                    </h2>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="mt-4 p-4 
+                                {% if message.tags == 'success' %}bg-green-100 border-green-400 text-green-700
+                                {% elif message.tags == 'error' %}bg-red-100 border-red-400 text-red-700
+                                {% endif %} 
+                                rounded">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <!-- Selección de Cliente -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-2">
+                            <input type="checkbox" id="cliente_existente" name="cliente_existente" 
+                                   {% if venta and venta.cliente %}checked{% endif %}
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="cliente_existente" class="ml-2 block text-sm text-gray-900">
+                                Cliente Existente
+                            </label>
+                        </div>
+
+                        <div id="cliente-existente-container" 
+                             class="{% if not venta or not venta.cliente %}hidden{% endif %}">
+                            <label class="block text-sm font-medium text-gray-700">Seleccionar Cliente</label>
+                            <select name="cliente" 
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Seleccione un cliente</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}" 
+                                            {% if venta and venta.cliente.id == cliente.id %}selected{% endif %}>
+                                        {{ cliente.nombre }} (RUT: {{ cliente.rut }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div id="nuevo-cliente-container" 
+                             class="{% if venta and venta.cliente %}hidden{% endif %}">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Nombre*</label>
+                                    <input type="text" name="nombre_cliente" 
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">RUT*</label>
+                                    <input type="text" name="rut_cliente" 
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Teléfono*</label>
+                                    <input type="text" name="telefono_cliente" 
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detalles de Venta -->
+                    <div id="detalles-venta">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Detalles de Venta</h3>
+                        
+                        <div id="productos-container">
+                            {% for form in detalle_venta_formset %}
+                            <div class="producto-item grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 p-4 bg-gray-50 rounded-lg">
+                                {{ form.producto_id }}
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Producto</label>
+                                    <select name="detalleventa_set-{{ forloop.counter0 }}-producto_id" 
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                        <option value="">Seleccionar Producto</option>
+                                        {% for producto in productos_venta %}
+                                            <option value="{{ producto.id }}"
+                                                    {% if form.producto_id.value == producto.id %}selected{% endif %}>
+                                                {{ producto.nombre }} ({{ producto.codigo }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Cantidad</label>
+                                    <input type="number" step="0.01" min="0" 
+                                           name="detalleventa_set-{{ forloop.counter0 }}-cantidad"
+                                           value="{{ form.cantidad.value|default:'1' }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Precio Unitario</label>
+                                    <input type="number" step="0.01" min="0" 
+                                           name="detalleventa_set-{{ forloop.counter0 }}-precio_unitario"
+                                           value="{{ form.precio_unitario.value|default:'' }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="button" id="agregar-producto" 
+                                class="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">
+                            <i class="fas fa-plus mr-2"></i>Agregar Producto
+                        </button>
+                    </div>
+
+                    <!-- Opciones de Venta -->
+                    <div class="mt-6">
+                        <div class="flex items-center mb-4">
+                            <input type="checkbox" id="es_credito" name="es_credito" 
+                                   {% if venta and venta.es_credito %}checked{% endif %}
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="es_credito" class="ml-2 block text-sm text-gray-900">
+                                Venta a Crédito
+                            </label>
+                        </div>
+
+                        <div id="credito-container" 
+                             class="{% if not venta or not venta.es_credito %}hidden{% endif %}">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Días de Crédito</label>
+                                    <input type="number" name="dias_credito" 
+                                           value="{{ venta.dias_credito|default:'30' }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700">Observaciones</label>
+                        <textarea name="observaciones" 
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm h-24">{{ venta.observaciones|default:'' }}</textarea>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="flex justify-between items-center mt-8">
+                        <a href="{% url 'ventas:lista_ventas' %}" 
+                           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Cancelar
+                        </a>
+                        <button type="submit" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                            {% if venta %}
+                                Actualizar Venta
+                            {% else %}
+                                Crear Venta
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const clienteExistenteCheckbox = document.getElementById('cliente_existente');
+    const clienteExistenteContainer = document.getElementById('cliente-existente-container');
+    const nuevoClienteContainer = document.getElementById('nuevo-cliente-container');
+
+    clienteExistenteCheckbox.addEventListener('change', function() {
+        clienteExistenteContainer.classList.toggle('hidden', !this.checked);
+        nuevoClienteContainer.classList.toggle('hidden', this.checked);
+    });
+
+    const esCreditoCheckbox = document.getElementById('es_credito');
+    const creditoContainer = document.getElementById('credito-container');
+
+    esCreditoCheckbox.addEventListener('change', function() {
+        creditoContainer.classList.toggle('hidden', !this.checked);
+    });
+
+    const agregarProductoBtn = document.getElementById('agregar-producto');
+    const productosContainer = document.getElementById('productos-container');
+
+    agregarProductoBtn.addEventListener('click', function() {
+        // Clonar el último elemento de producto
+        const ultimoProducto = productosContainer.lastElementChild;
+        const nuevoProducto = ultimoProducto.cloneNode(true);
+
+        // Limpiar valores
+        const selects = nuevoProducto.querySelectorAll('select, input');
+        selects.forEach(select => {
+            select.selectedIndex = 0;
+            select.value = '';
+        });
+
+        // Ajustar nombres de campos para el nuevo formulario
+        const totalForms = productosContainer.children.length;
+        nuevoProducto.querySelectorAll('[name]').forEach(input => {
+            const nombreOriginal = input.name;
+            const nombreNuevo = nombreOriginal.replace(
+                /detalleventa_set-\d+-/,
+                `detalleventa_set-${totalForms}-`
+            );
+            input.name = nombreNuevo;
+        });
+
+        // Agregar al contenedor
+        productosContainer.appendChild(nuevoProducto);
+    });
+});
+</script>
+{% endblock %}
